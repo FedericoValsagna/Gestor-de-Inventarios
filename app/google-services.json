@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "224640591636",
+    "project_id": "gestor-de-inventario-74bf7",
+    "storage_bucket": "gestor-de-inventario-74bf7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224640591636:android:f54b55e377830218614401",
+        "android_client_info": {
+          "package_name": "com.example.gestordeinventario"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwhMSXOOsVQvcR_SDmJ8wr_t4YPeG8iEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
