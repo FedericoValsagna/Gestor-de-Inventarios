@@ -4,6 +4,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.gestordeinventario.model.Authenticator
 import kotlinx.coroutines.delay
 
 class LoginViewModel : ViewModel() {
@@ -32,7 +33,12 @@ class LoginViewModel : ViewModel() {
     private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
     suspend fun onLoginSelected() {
         _isLoading.value = true
-        delay(4000)
-        _isLoading.value = false
+        if (_email.value != null && _password.value != null) {
+            if (Authenticator().login(_email.value, _password.value) != null) {
+                _isLoading.value = false
+            }
+        }
+        // delay(4000)
+        // _isLoading.value = false
     }
 }
