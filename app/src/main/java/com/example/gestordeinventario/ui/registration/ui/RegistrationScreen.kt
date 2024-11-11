@@ -1,4 +1,4 @@
-package com.example.gestordeinventario.ui.login.ui
+package com.example.gestordeinventario.ui.registration.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,13 +15,15 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,21 +37,22 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel, navigateToHome:() -> Unit, navigateToRegistration: () -> Unit) {
+fun RegistrationScreen(viewModel: RegistrationViewModel, navigateToHome:() -> Unit) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        Login(Modifier.align(Alignment.Center), viewModel, navigateToHome, navigateToRegistration)
+        Registration(Modifier.align(Alignment.Center), viewModel, navigateToHome)
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel, navigateToHome: () -> Unit, navigateToRegistration: () -> Unit) {
+fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, navigateToHome: () -> Unit) {
 
     val email: String by viewModel.email.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
-    val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
+    var passwordRepeat: String
+    val registrationEnable: Boolean by viewModel.registrationEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val couroutineScope = rememberCoroutineScope()
 
@@ -64,15 +67,17 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigateToHome: () -> U
             Spacer(modifier = Modifier.padding(16.dp))
             HeaderImage(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
-            EmailField(email) { viewModel.onLoginChanged(it, password) }
+            EmailField(email) { viewModel.onRegistrationChanged(it, password) }
             Spacer(modifier = Modifier.padding(4.dp))
-            PasswordField(password) { viewModel.onLoginChanged(email, it) }
-            Spacer(modifier = Modifier.padding(8.dp))
-            SignIn(Modifier.align(Alignment.Start)) { navigateToRegistration()}
+            PasswordField(password) { viewModel.onRegistrationChanged(email, it) }
+            Spacer(modifier = Modifier.padding(4.dp))
+            passwordRepeat = RepeatPasswordField()
             Spacer(modifier = Modifier.padding(16.dp))
-            LoginButton(Modifier.align(Alignment.CenterHorizontally), loginEnable) {
-                    couroutineScope.launch { viewModel.onLoginSelected()
-                    navigateToHome()
+            RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
+                couroutineScope.launch { viewModel.onRegistrationSelected()
+                    if(password == passwordRepeat) {
+                        navigateToHome()
+                    }
                 }
             }
         }
@@ -80,21 +85,21 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigateToHome: () -> U
 }
 
 @Composable
-fun LoginButton(modifier: Modifier, loginEnable: Boolean, onLoginSelected: () -> Unit) {
+fun RegistrationButton(modifier: Modifier, registrationEnable: Boolean, onRegistrationSelected: () -> Unit) {
     Button(
-            onClick = { onLoginSelected() },
-            modifier = modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-            colors = ButtonDefaults.buttonColors(
-                                                backgroundColor = Color(0xFF2F3DA2),
-                                                disabledBackgroundColor = Color(0xFF6F76AD),
-                                                contentColor = Color.White,
-                                                disabledContentColor = Color.White
-                                    ),
-            enabled = loginEnable
+        onClick = { onRegistrationSelected() },
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color(0xFF2F3DA2),
+            disabledBackgroundColor = Color(0xFF6F76AD),
+            contentColor = Color.White,
+            disabledContentColor = Color.White
+        ),
+        enabled = registrationEnable
     ) {
-            Text(text = "Iniciar Sesión")
+        Text(text = "Registrarse")
     }
 }
 
@@ -113,16 +118,12 @@ fun HeaderText(modifier: Modifier) {
         modifier = modifier,
         color = Color(0xFF2F3DA2)
     )
-}
-
-@Composable
-fun SignIn(modifier: Modifier, navigateToRegistration: () -> Unit) {
+    Spacer(modifier = Modifier.padding(8.dp))
     Text(
         text = "Registrarse",
-        modifier = modifier.clickable { navigateToRegistration() },
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color(0xFF4EA8E9)
+        fontSize = 28.sp,
+        modifier = modifier,
+        color = Color(0xFF2F3DA2)
     )
 }
 
@@ -132,7 +133,7 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         value = password,
         onValueChange = {onTextFieldChanged(it)},
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Password") },
+        placeholder = { Text(text = "Ingresar contraseña") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
@@ -146,21 +147,43 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
+fun RepeatPasswordField(): String {
+    var password by remember { mutableStateOf("")}
+
+    TextField(
+        value = password,
+        onValueChange = {password = it},
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(text = "Repetir contraseña") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        singleLine = true,
+        maxLines = 1,
+        colors = textFieldColors(
+            textColor = Color(0xFF484747),
+            backgroundColor = Color(0xFFDCDCDC),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
+    )
+    return password
+}
+
+@Composable
 fun EmailField(email : String, onTextFieldChanged: (String) -> Unit) {
     TextField(
-            value = email,
-            onValueChange = { onTextFieldChanged(it) },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = "Email") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            singleLine = true,
-            maxLines = 1,
-            colors = textFieldColors(
-                                textColor = Color(0xFF484747),
-                                backgroundColor = Color(0xFFDCDCDC),
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent
-            )
+        value = email,
+        onValueChange = { onTextFieldChanged(it) },
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(text = "Ingresar correo") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        singleLine = true,
+        maxLines = 1,
+        colors = textFieldColors(
+            textColor = Color(0xFF484747),
+            backgroundColor = Color(0xFFDCDCDC),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
     )
 }
 
@@ -170,5 +193,5 @@ fun HeaderImage(modifier: Modifier) {
         painter = painterResource(id = R.drawable.esc_fiuba),
         contentDescription = "HeaderEscudoFiuba",
         modifier = modifier.size(200.dp)
-        )
+    )
 }
