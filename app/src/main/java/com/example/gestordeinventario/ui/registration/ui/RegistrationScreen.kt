@@ -103,6 +103,9 @@ fun RegistrationButton(modifier: Modifier, registrationEnable: Boolean, onRegist
     }
 }
 
+fun calculateArea(width: Int, height: Int): Int {
+    return width * height
+}
 @Composable
 fun HeaderText(modifier: Modifier) {
     Text(
