@@ -1,6 +1,7 @@
 package com.example.gestordeinventario.ui.home.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,55 +11,104 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gestordeinventario.ui.common.LogoutButton
 
 @Composable
-fun HomeAdmins() {
-    Column(
-        modifier = Modifier
+fun HomeScreen(accessPrivileges: String, logout: () -> Unit){
+    Box(
+        Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "INICIO ENCARGADOS",
-            fontSize = 28.sp,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            MainButton(text = "Elementos")
-            MainButton(text = "Alumnos")
+            .padding(16.dp)) {
+        if(accessPrivileges == "admin"){
+            HomeAdmins(modifier = Modifier.align(Alignment.Center), logout = logout)
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            MainButton(text = "Proveedores")
-            MainButton(text = "Vencimientos")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = { /* Accion de cerrar sesion */ }) {
-            Text("Cerrar Sesión", style = MaterialTheme.typography.body2)
+        else {
+            HomeStudents(modifier = Modifier.align(Alignment.Center), logout = logout)
         }
     }
 }
 
 @Composable
-fun MainButton(text: String) {
+fun HomeAdmins(modifier: Modifier, logout: () -> Unit) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HomeHeader(modifier = modifier)
+        Spacer(modifier = modifier.height(16.dp))
+        HomeAdminsButtons(modifier = modifier)
+        Spacer(modifier = modifier.height(16.dp))
+        LogoutButton(modifier = modifier, logout = logout)
+    }
+}
+
+@Composable
+fun HomeStudents(modifier: Modifier, logout: () -> Unit) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HomeHeader(modifier = modifier)
+        Spacer(modifier = modifier.height(16.dp))
+        HomeStudentsButtons(modifier = modifier)
+        LogoutButton(modifier = modifier, logout = logout)
+    }
+}
+
+@Composable
+fun HomeAdminsButtons(modifier: Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        HomeButton(text = "Elementos")
+        HomeButton(text = "Alumnos")
+    }
+
+    Spacer(modifier = modifier.height(16.dp))
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        HomeButton(text = "Proveedores")
+        HomeButton(text = "Vencimientos")
+    }
+}
+
+@Composable
+fun HomeStudentsButtons(modifier: Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        HomeButton(text = "Elementos")
+        HomeButton(text = "Pendientes")
+    }
+    Spacer(modifier = modifier.height(16.dp))
+}
+
+@Composable
+fun HomeHeader(modifier: Modifier) {
+    Text(
+        text = "INICIO ENCARGADOS",
+        fontSize = 28.sp,
+        modifier = modifier.padding(vertical = 16.dp)
+    )
+}
+
+@Composable
+fun HomeButton(text: String) {
     Button(
         onClick = { /* Accion al presionar el boton */ },
         modifier = Modifier
