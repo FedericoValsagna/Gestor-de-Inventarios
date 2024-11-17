@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,7 +71,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     //Añadidos
     implementation(libs.androidx.runtime.livedata)
-    implementation("androidx.compose.material:material:1.7.5")
+    implementation("androidx.compose.material3:material3:1.3.1")
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-firestore")
     implementation(libs.androidx.navigation.compose)

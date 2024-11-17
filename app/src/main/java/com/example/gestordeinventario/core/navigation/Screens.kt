@@ -10,3 +10,6 @@ object Home
 
 @Serializable
 object Registration
+
+@Serializable
+object StudentsList

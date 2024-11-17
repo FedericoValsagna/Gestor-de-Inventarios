@@ -1,4 +1,4 @@
-package com.example.gestordeinventario.ui.login.ui
+package com.example.gestordeinventario.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,13 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults.textFieldColors
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -87,8 +86,8 @@ fun LoginButton(modifier: Modifier, loginEnable: Boolean, onLoginSelected: () ->
                     .fillMaxWidth()
                     .height(48.dp),
             colors = ButtonDefaults.buttonColors(
-                                                backgroundColor = Color(0xFF2F3DA2),
-                                                disabledBackgroundColor = Color(0xFF6F76AD),
+                                                containerColor = Color(0xFF2F3DA2),
+                                                disabledContainerColor = Color(0xFF6F76AD),
                                                 contentColor = Color.White,
                                                 disabledContentColor = Color.White
                                     ),
@@ -136,9 +135,9 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
-        colors = textFieldColors(
-            textColor = Color(0xFF484747),
-            backgroundColor = Color(0xFFDCDCDC),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color(0xFF484747),
+            focusedContainerColor = Color(0xFFDCDCDC),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         )
@@ -155,9 +154,9 @@ fun EmailField(email : String, onTextFieldChanged: (String) -> Unit) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             singleLine = true,
             maxLines = 1,
-            colors = textFieldColors(
-                                textColor = Color(0xFF484747),
-                                backgroundColor = Color(0xFFDCDCDC),
+            colors = TextFieldDefaults.colors(
+                                focusedTextColor = Color(0xFF484747),
+                                focusedContainerColor = Color(0xFFDCDCDC),
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
             )

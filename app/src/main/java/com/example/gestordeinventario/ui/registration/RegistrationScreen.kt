@@ -1,7 +1,6 @@
-package com.example.gestordeinventario.ui.registration.ui
+package com.example.gestordeinventario.ui.registration
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,12 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults.textFieldColors
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,7 +69,7 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, navigateT
             Spacer(modifier = Modifier.padding(4.dp))
             PasswordField(password) { viewModel.onRegistrationChanged(email, it) }
             Spacer(modifier = Modifier.padding(4.dp))
-            passwordRepeat = RepeatPasswordField()
+            passwordRepeat = repeatPasswordField()
             Spacer(modifier = Modifier.padding(16.dp))
             RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
                 couroutineScope.launch { viewModel.onRegistrationSelected()
@@ -92,8 +90,8 @@ fun RegistrationButton(modifier: Modifier, registrationEnable: Boolean, onRegist
             .fillMaxWidth()
             .height(48.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFF2F3DA2),
-            disabledBackgroundColor = Color(0xFF6F76AD),
+            containerColor = Color(0xFF2F3DA2),
+            disabledContainerColor = Color(0xFF6F76AD),
             contentColor = Color.White,
             disabledContentColor = Color.White
         ),
@@ -103,9 +101,6 @@ fun RegistrationButton(modifier: Modifier, registrationEnable: Boolean, onRegist
     }
 }
 
-fun calculateArea(width: Int, height: Int): Int {
-    return width * height
-}
 @Composable
 fun HeaderText(modifier: Modifier) {
     Text(
@@ -140,9 +135,9 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
-        colors = textFieldColors(
-            textColor = Color(0xFF484747),
-            backgroundColor = Color(0xFFDCDCDC),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color(0xFF484747),
+            focusedContainerColor = Color(0xFFDCDCDC),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         )
@@ -150,7 +145,7 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun RepeatPasswordField(): String {
+fun repeatPasswordField(): String {
     var password by remember { mutableStateOf("")}
 
     TextField(
@@ -161,9 +156,9 @@ fun RepeatPasswordField(): String {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
-        colors = textFieldColors(
-            textColor = Color(0xFF484747),
-            backgroundColor = Color(0xFFDCDCDC),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color(0xFF484747),
+            focusedContainerColor = Color(0xFFDCDCDC),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         )
@@ -181,9 +176,9 @@ fun EmailField(email : String, onTextFieldChanged: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
         maxLines = 1,
-        colors = textFieldColors(
-            textColor = Color(0xFF484747),
-            backgroundColor = Color(0xFFDCDCDC),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color(0xFF484747),
+            focusedContainerColor = Color(0xFFDCDCDC),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         )
