@@ -16,27 +16,19 @@ import com.example.gestordeinventario.ui.students_list.StudentsListViewModel
 @Composable
 fun NavigationWrapper() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = StudentsList){
+    val screensNavigation = ScreensNavigation(navController)
+
+    NavHost(navController = navController, startDestination = Login){
         composable<Login>{
-            LoginScreen(
-                LoginViewModel(),
-                        {navController.navigate(Home)},
-                        {navController.navigate(Registration)}
-                )
+            LoginScreen(LoginViewModel(), screensNavigation)
         }
 
         composable<Registration>{
-            RegistrationScreen(RegistrationViewModel()){navController.navigate(Home)}
+            RegistrationScreen(RegistrationViewModel(), screensNavigation)
         }
 
         composable<Home>{
-            HomeScreen(accessPrivileges = "admin") {
-                navController.navigate(Login) {
-                    popUpTo(Login) {
-                        inclusive = true
-                    }
-                }
-            }
+            HomeScreen(accessPrivileges = "admin", screensNavigation)
         }
 
         composable<StudentsList> {
@@ -45,13 +37,7 @@ fun NavigationWrapper() {
             for (i in 1..99) {
                 viewModel.addStudent(Student("Alumno $i", i*100000, i, i*2))
             }
-            StudentsListScreen(viewModel) {
-                navController.navigate(Login) {
-                    popUpTo(Login) {
-                        inclusive = true
-                    }
-                }
-            }
+            StudentsListScreen(viewModel, screensNavigation)
         }
     }
 }

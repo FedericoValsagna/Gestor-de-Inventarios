@@ -9,26 +9,31 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.ui.common.LogoutButton
 
 @Composable
-fun StudentsListScreen(viewModel : StudentsListViewModel,  logout: () -> Unit){
+fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: ScreensNavigation){
     val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
 
     Column(
         Modifier
@@ -37,12 +42,12 @@ fun StudentsListScreen(viewModel : StudentsListViewModel,  logout: () -> Unit){
         StudentListHeader(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(8.dp))
         HorizontalDivider()
-        Box(Modifier.size(580.dp)){
+        Box(Modifier.height(screenHeight*0.75f)){
             StudentList(studentsList, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(16.dp))
         HorizontalDivider()
-        LogoutButton(modifier = Modifier.align(Alignment.Start), logout = logout)
+        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.Restart()}
     }
 }
 

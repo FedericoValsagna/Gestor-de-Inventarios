@@ -30,21 +30,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.R
+import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel, navigateToHome:() -> Unit, navigateToRegistration: () -> Unit) {
+fun LoginScreen(viewModel: LoginViewModel, screensNavigation: ScreensNavigation) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        Login(Modifier.align(Alignment.Center), viewModel, navigateToHome, navigateToRegistration)
+        Login(Modifier.align(Alignment.Center), viewModel, screensNavigation)
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel, navigateToHome: () -> Unit, navigateToRegistration: () -> Unit) {
+fun Login(modifier: Modifier, viewModel: LoginViewModel, screensNavigation: ScreensNavigation) {
 
     val email: String by viewModel.email.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
@@ -67,11 +68,11 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigateToHome: () -> U
             Spacer(modifier = Modifier.padding(4.dp))
             PasswordField(password) { viewModel.onLoginChanged(email, it) }
             Spacer(modifier = Modifier.padding(8.dp))
-            SignIn(Modifier.align(Alignment.Start)) { navigateToRegistration()}
+            SignIn(Modifier.align(Alignment.Start)) { screensNavigation.NavigateToRegistration()}
             Spacer(modifier = Modifier.padding(16.dp))
             LoginButton(Modifier.align(Alignment.CenterHorizontally), loginEnable) {
                     couroutineScope.launch { viewModel.onLoginSelected()
-                    navigateToHome()
+                        screensNavigation.NavigateToHome()
                 }
             }
         }

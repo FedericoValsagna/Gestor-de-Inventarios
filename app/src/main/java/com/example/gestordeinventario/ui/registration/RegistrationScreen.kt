@@ -31,21 +31,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.R
+import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun RegistrationScreen(viewModel: RegistrationViewModel, navigateToHome:() -> Unit) {
+fun RegistrationScreen(viewModel: RegistrationViewModel, screensNavigation: ScreensNavigation) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        Registration(Modifier.align(Alignment.Center), viewModel, navigateToHome)
+        Registration(Modifier.align(Alignment.Center), viewModel, screensNavigation)
     }
 }
 
 @Composable
-fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, navigateToHome: () -> Unit) {
+fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNavigation: ScreensNavigation) {
 
     val email: String by viewModel.email.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
@@ -74,7 +75,7 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, navigateT
             RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
                 couroutineScope.launch { viewModel.onRegistrationSelected()
                     if(password == passwordRepeat) {
-                        navigateToHome()
+                        screensNavigation.Restart()
                     }
                 }
             }

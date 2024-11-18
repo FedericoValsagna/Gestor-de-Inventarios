@@ -18,25 +18,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.ui.common.LogoutButton
 
 @Composable
-fun HomeScreen(accessPrivileges: String, logout: () -> Unit){
+fun HomeScreen(accessPrivileges: String, screensNavigation: ScreensNavigation){
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
         if(accessPrivileges == "admin"){
-            HomeAdmins(modifier = Modifier.align(Alignment.Center), logout = logout)
+            HomeAdmins(modifier = Modifier.align(Alignment.Center), screensNavigation = screensNavigation)
         }
         else {
-            HomeStudents(modifier = Modifier.align(Alignment.Center), logout = logout)
+            HomeStudents(modifier = Modifier.align(Alignment.Center), screensNavigation = screensNavigation)
         }
     }
 }
 
 @Composable
-fun HomeAdmins(modifier: Modifier, logout: () -> Unit) {
+fun HomeAdmins(modifier: Modifier, screensNavigation: ScreensNavigation) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -45,14 +46,14 @@ fun HomeAdmins(modifier: Modifier, logout: () -> Unit) {
     ) {
         HomeHeader(modifier = modifier)
         Spacer(modifier = modifier.height(16.dp))
-        HomeAdminsButtons(modifier = modifier)
+        HomeAdminsButtons(modifier = modifier, screensNavigation = screensNavigation)
         Spacer(modifier = modifier.height(16.dp))
-        LogoutButton(modifier = modifier, logout = logout)
+        LogoutButton(modifier = modifier){screensNavigation.Restart()}
     }
 }
 
 @Composable
-fun HomeStudents(modifier: Modifier, logout: () -> Unit) {
+fun HomeStudents(modifier: Modifier, screensNavigation: ScreensNavigation) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -61,19 +62,19 @@ fun HomeStudents(modifier: Modifier, logout: () -> Unit) {
     ) {
         HomeHeader(modifier = modifier)
         Spacer(modifier = modifier.height(16.dp))
-        HomeStudentsButtons(modifier = modifier)
-        LogoutButton(modifier = modifier, logout = logout)
+        HomeStudentsButtons(modifier = modifier, screensNavigation = screensNavigation)
+        LogoutButton(modifier = modifier){screensNavigation.Restart()}
     }
 }
 
 @Composable
-fun HomeAdminsButtons(modifier: Modifier) {
+fun HomeAdminsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos")
-        HomeButton(text = "Alumnos")
+        HomeButton(text = "Elementos"){screensNavigation.NavigateToStudentsList()}
+        HomeButton(text = "Alumnos"){screensNavigation.NavigateToStudentsList()}
     }
 
     Spacer(modifier = modifier.height(16.dp))
@@ -81,19 +82,19 @@ fun HomeAdminsButtons(modifier: Modifier) {
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Proveedores")
-        HomeButton(text = "Vencimientos")
+        HomeButton(text = "Proveedores"){screensNavigation.NavigateToStudentsList()}
+        HomeButton(text = "Vencimientos"){screensNavigation.NavigateToStudentsList()}
     }
 }
 
 @Composable
-fun HomeStudentsButtons(modifier: Modifier) {
+fun HomeStudentsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos")
-        HomeButton(text = "Pendientes")
+        HomeButton(text = "Elementos"){screensNavigation.NavigateToStudentsList()}
+        HomeButton(text = "Pendientes"){screensNavigation.NavigateToStudentsList()}
     }
     Spacer(modifier = modifier.height(16.dp))
 }
@@ -108,9 +109,9 @@ fun HomeHeader(modifier: Modifier) {
 }
 
 @Composable
-fun HomeButton(text: String) {
+fun HomeButton(text: String, navigate: () -> Unit) {
     Button(
-        onClick = { /* Accion al presionar el boton */ },
+        onClick = {navigate()},
         modifier = Modifier
             .width(150.dp)
             .height(100.dp)
