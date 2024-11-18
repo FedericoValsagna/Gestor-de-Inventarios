@@ -48,7 +48,7 @@ fun HomeAdmins(modifier: Modifier, screensNavigation: ScreensNavigation) {
         Spacer(modifier = modifier.height(16.dp))
         HomeAdminsButtons(modifier = modifier, screensNavigation = screensNavigation)
         Spacer(modifier = modifier.height(16.dp))
-        LogoutButton(modifier = modifier){screensNavigation.Restart()}
+        LogoutButton(modifier = modifier){screensNavigation.restart()}
     }
 }
 
@@ -63,7 +63,7 @@ fun HomeStudents(modifier: Modifier, screensNavigation: ScreensNavigation) {
         HomeHeader(modifier = modifier)
         Spacer(modifier = modifier.height(16.dp))
         HomeStudentsButtons(modifier = modifier, screensNavigation = screensNavigation)
-        LogoutButton(modifier = modifier){screensNavigation.Restart()}
+        LogoutButton(modifier = modifier){screensNavigation.restart()}
     }
 }
 
@@ -73,8 +73,8 @@ fun HomeAdminsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) 
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos"){screensNavigation.NavigateToStudentsList()}
-        HomeButton(text = "Alumnos"){screensNavigation.NavigateToStudentsList()}
+        HomeButton(text = "Elementos"){screensNavigation.navigateToStudentsList()}
+        HomeButton(text = "Alumnos"){screensNavigation.navigateToStudentsList()}
     }
 
     Spacer(modifier = modifier.height(16.dp))
@@ -82,8 +82,8 @@ fun HomeAdminsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) 
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Proveedores"){screensNavigation.NavigateToStudentsList()}
-        HomeButton(text = "Vencimientos"){screensNavigation.NavigateToStudentsList()}
+        HomeButton(text = "Proveedores"){screensNavigation.navigateToStudentsList()}
+        HomeButton(text = "Vencimientos"){screensNavigation.navigateToStudentsList()}
     }
 }
 
@@ -93,8 +93,8 @@ fun HomeStudentsButtons(modifier: Modifier, screensNavigation: ScreensNavigation
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos"){screensNavigation.NavigateToStudentsList()}
-        HomeButton(text = "Pendientes"){screensNavigation.NavigateToStudentsList()}
+        HomeButton(text = "Elementos"){screensNavigation.navigateToStudentsList()}
+        HomeButton(text = "Pendientes"){screensNavigation.navigateToStudentsList()}
     }
     Spacer(modifier = modifier.height(16.dp))
 }

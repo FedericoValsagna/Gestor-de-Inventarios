@@ -68,11 +68,11 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, screensNavigation: Scre
             Spacer(modifier = Modifier.padding(4.dp))
             PasswordField(password) { viewModel.onLoginChanged(email, it) }
             Spacer(modifier = Modifier.padding(8.dp))
-            SignIn(Modifier.align(Alignment.Start)) { screensNavigation.NavigateToRegistration()}
+            SignIn(Modifier.align(Alignment.Start)) { screensNavigation.navigateToRegistration()}
             Spacer(modifier = Modifier.padding(16.dp))
             LoginButton(Modifier.align(Alignment.CenterHorizontally), loginEnable) {
                     couroutineScope.launch { viewModel.onLoginSelected()
-                        screensNavigation.NavigateToHome()
+                        screensNavigation.navigateToHome()
                 }
             }
         }

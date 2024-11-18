@@ -1,8 +1,7 @@
-package com.example.gestordeinventario.ui.students_list
+package com.example.gestordeinventario.ui.lendings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,9 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.ui.common.LogoutButton
+import com.example.gestordeinventario.ui.students_list.LendingsViewModel
+import com.example.gestordeinventario.ui.students_list.Student
 
 @Composable
-fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: ScreensNavigation){
+fun LendingsScreen(viewModel: LendingsViewModel, studentName: String, screensNavigation: ScreensNavigation){
     val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
@@ -40,11 +41,11 @@ fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: Scre
         Modifier
             .fillMaxSize()
             .padding(16.dp) ) {
-        StudentListHeader(Modifier.align(Alignment.CenterHorizontally))
+        LendingsHeader(Modifier.align(Alignment.CenterHorizontally), studentName)
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            StudentList(students = studentsList, modifier = Modifier, screensNavigation = screensNavigation)
+            Lendings(studentsList, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -53,79 +54,40 @@ fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: Scre
 }
 
 @Composable
-fun StudentListHeader(modifier: Modifier) {
+fun LendingsHeader(modifier: Modifier, studentName: String) {
     Text(
-        text = "Listado de Alumnos",
+        text = "Prestaciones $studentName",
         fontSize = 24.sp,
         modifier = modifier.padding(vertical = 16.dp)
     )
 }
 
 @Composable
-fun StudentList(students: List<Student>, modifier: Modifier, screensNavigation: ScreensNavigation) {
-    LazyColumn(
+fun Lendings(students: List<Student>, modifier: Modifier) {
+    LazyColumn (
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         item {
             Row(Modifier.background(Color.Gray)) {
-                StudentListTableCell(text = "Alumno", weight = 1f, modifier = modifier)
-                StudentListTableCell(text = "Padrón", weight = 1f, modifier = modifier)
-                StudentListTableCell(text = "Pendientes", weight = 1f, modifier = modifier)
-                StudentListTableCell(text = "Prestaciones", weight = 1f, modifier = modifier)
+                LendingsTableCell(text = "Elemento", weight = 1f, modifier = modifier)
+                LendingsTableCell(text = "Cantidad", weight = 1f, modifier = modifier)
+                LendingsTableCell(text = "Tiempo", weight = 1f, modifier = modifier)
             }
         }
-        items(students) { student ->
-            Row(modifier = modifier.fillMaxWidth()) {
-                StudentListTableCell(text = student.name, weight = 1f, modifier = modifier)
-                StudentListTableCell(
-                    text = student.padron.toString(),
-                    weight = 1f,
-                    modifier = modifier
-                )
-                StudentListTableClickableCell(
-                    text = "Pendientes",
-                    weight = 1f,
-                    modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToPendings(student.name)},
-                    navigateString = student.name
-                )
-                StudentListTableClickableCell(
-                    text = "Prestaciones",
-                    weight = 1f,
-                    modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToLendings(student.name)},
-                    navigateString = student.name
-                )
+        items(students) {student ->
+            Row (modifier = modifier.fillMaxWidth()) {
+                LendingsTableCell(text = student.name, weight = 1f, modifier = modifier)
+                LendingsTableCell(text = student.padron.toString(), weight = 1f, modifier = modifier)
+                LendingsTableCell(text = student.devolucionesPendientes.toString(), weight = 1f, modifier = modifier)
             }
         }
     }
 }
 
 @Composable
-fun RowScope.StudentListTableClickableCell(
-    text: String,
-    weight: Float,
-    modifier: Modifier,
-    navigateToScreen : (String) -> Unit,
-    navigateString : String
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .clickable { navigateToScreen(navigateString) }
-            .border(1.dp, Color.White)
-            .weight(weight)
-            .padding(8.dp)
-            .size(52.dp)
-            .align(Alignment.CenterVertically),
-        color = Color(0xFF4EA8E9)
-    )
-}
-
-@Composable
-fun RowScope.StudentListTableCell(
+fun RowScope.LendingsTableCell(
     text: String,
     weight: Float,
     modifier: Modifier

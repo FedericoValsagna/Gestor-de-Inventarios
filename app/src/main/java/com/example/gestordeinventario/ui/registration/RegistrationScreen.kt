@@ -75,7 +75,7 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
             RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
                 couroutineScope.launch { viewModel.onRegistrationSelected()
                     if(password == passwordRepeat) {
-                        screensNavigation.Restart()
+                        screensNavigation.restart()
                     }
                 }
             }
