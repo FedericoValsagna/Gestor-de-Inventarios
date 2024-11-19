@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.dataclasses.StudentDataClass
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -19,6 +20,9 @@ class StudentRepository {
             Log.i("REPOTAG", e.toString())
             emptyList()
         }
+    }
+    suspend fun getById(id: String): Student? {
+        return instance(Firebase.firestore.document("users/$id").get().await().toObject<StudentDataClass>())
     }
 
     private suspend fun instance(dataClass: StudentDataClass?): Student? {

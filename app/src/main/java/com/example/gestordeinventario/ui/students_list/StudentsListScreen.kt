@@ -96,7 +96,7 @@ fun StudentList(students: List<Student>, modifier: Modifier, screensNavigation: 
                     text = "Prestaciones",
                     weight = 1f,
                     modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToLendings(student.name)},
+                    navigateToScreen = {screensNavigation.navigateToLendings(student.padron)},
                     navigateString = student.name
                 )
             }
