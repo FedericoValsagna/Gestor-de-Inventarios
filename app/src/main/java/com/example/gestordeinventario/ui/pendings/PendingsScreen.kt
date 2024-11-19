@@ -80,7 +80,7 @@ fun Pendings(pendingDevolutions: List<PendingElement>, modifier: Modifier) {
         items(pendingDevolutions) {element ->
             Row (modifier = modifier.fillMaxWidth()) {
                 PendingsTableCell(text = element.element.name, weight = 1f, modifier = modifier)
-                PendingsTableCell(text = element.quantity.toString()<, weight = 1f, modifier = modifier)
+                PendingsTableCell(text = element.quantity.toString(), weight = 1f, modifier = modifier)
                 PendingsTableCell(text = element.devolutionDate.toString(), weight = 1f, modifier = modifier)
             }
         }
