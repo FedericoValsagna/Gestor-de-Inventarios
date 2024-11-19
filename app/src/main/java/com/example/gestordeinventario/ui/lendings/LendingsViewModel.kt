@@ -14,16 +14,12 @@ class LendingsViewModel(padron: String): ViewModel() {
     private val _studentsList = MutableLiveData< List<Student> >()
     val studentsList : LiveData< List<Student> > = _studentsList
     private val _student: MutableLiveData<Student> = MutableLiveData<Student>()
+    val student: LiveData<Student> = _student
+
 
     init{
         getUser(padron)
     }
-    val student: LiveData<Student> = _student
-
-    public fun addStudent(student: Student) {
-        _studentsList.value = _studentsList.value?.plus(student) ?: mutableListOf(student)
-    }
-
     private fun getUser(padron: String){
         viewModelScope.launch{
             val result: Student = withContext(Dispatchers.IO) {

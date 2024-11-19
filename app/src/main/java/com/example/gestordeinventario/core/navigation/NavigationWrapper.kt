@@ -50,7 +50,7 @@ fun NavigationWrapper() {
         composable<Pendings> {
             val pendings : Pendings = it.toRoute()
 
-            PendingsScreen(viewModel = PendingsViewModel(), studentName = pendings.studentName, screensNavigation)
+            PendingsScreen(viewModel = PendingsViewModel(pendings.studentName), screensNavigation)
         }
     }
 }
