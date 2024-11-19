@@ -28,7 +28,7 @@ class ElementRepository {
     private fun instance(dataClass: ElementDataClass?): Element? {
         dataClass ?: return null
         dataClass.totalQuantity ?: return null
-
-        return Element(dataClass.totalQuantity)
+        dataClass.name ?: return null
+        return Element(dataClass.name, dataClass.totalQuantity)
     }
 }
