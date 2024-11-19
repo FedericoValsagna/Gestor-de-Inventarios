@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
+import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.LogoutButton
 
 @Composable

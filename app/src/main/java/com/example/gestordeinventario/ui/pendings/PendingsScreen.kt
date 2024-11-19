@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.students_list.PendingsViewModel
-import com.example.gestordeinventario.ui.students_list.Student
+import com.example.gestordeinventario.model.Student
 
 @Composable
 fun PendingsScreen(viewModel: PendingsViewModel, studentName: String, screensNavigation: ScreensNavigation){
@@ -80,7 +80,7 @@ fun Pendings(students: List<Student>, modifier: Modifier) {
             Row (modifier = modifier.fillMaxWidth()) {
                 PendingsTableCell(text = student.name, weight = 1f, modifier = modifier)
                 PendingsTableCell(text = student.padron.toString(), weight = 1f, modifier = modifier)
-                PendingsTableCell(text = student.devolucionesPendientes.toString(), weight = 1f, modifier = modifier)
+                PendingsTableCell(text = student.pendingDevolutions.toString(), weight = 1f, modifier = modifier)
             }
         }
     }
