@@ -89,14 +89,14 @@ fun StudentList(students: List<Student>, modifier: Modifier, screensNavigation: 
                     text = "Pendientes",
                     weight = 1f,
                     modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToPendings(student.name)},
+                    navigateToScreen = {screensNavigation.navigateToPendings(student.padron)},
                     navigateString = student.name
                 )
                 StudentListTableClickableCell(
                     text = "Prestaciones",
                     weight = 1f,
                     modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToLendings(student.name)},
+                    navigateToScreen = {screensNavigation.navigateToLendings(student.padron)},
                     navigateString = student.name
                 )
             }

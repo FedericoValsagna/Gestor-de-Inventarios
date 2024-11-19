@@ -38,23 +38,19 @@ fun NavigationWrapper() {
 
         composable<StudentsList> {
             val viewModel = StudentsListViewModel()
-
-//            for (i in 1..99) {
-//                viewModel.addStudent(Student("Alumno $i", i*100000, i, i*2))
-//            }
             StudentsListScreen(viewModel, screensNavigation)
         }
 
         composable<Lendings> {
             val lendings : Lendings = it.toRoute()
 
-            LendingsScreen(viewModel = LendingsViewModel(), studentName = lendings.studentName, screensNavigation)
+            LendingsScreen(viewModel = LendingsViewModel(lendings.studentName), screensNavigation)
         }
 
         composable<Pendings> {
-            val lendings : Lendings = it.toRoute()
+            val pendings : Pendings = it.toRoute()
 
-            PendingsScreen(viewModel = PendingsViewModel(), studentName = lendings.studentName, screensNavigation)
+            PendingsScreen(viewModel = PendingsViewModel(pendings.studentName), screensNavigation)
         }
     }
 }

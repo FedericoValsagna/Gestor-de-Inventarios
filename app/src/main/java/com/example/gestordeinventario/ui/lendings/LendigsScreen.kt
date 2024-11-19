@@ -31,17 +31,17 @@ import com.example.gestordeinventario.ui.students_list.LendingsViewModel
 import com.example.gestordeinventario.model.Student
 
 @Composable
-fun LendingsScreen(viewModel: LendingsViewModel, studentName: String, screensNavigation: ScreensNavigation){
+fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavigation){
     val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
     Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp) ) {
-        LendingsHeader(Modifier.align(Alignment.CenterHorizontally), studentName)
+        LendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){

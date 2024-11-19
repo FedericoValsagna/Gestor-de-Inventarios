@@ -26,26 +26,27 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
+import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.students_list.PendingsViewModel
 import com.example.gestordeinventario.model.Student
 
 @Composable
-fun PendingsScreen(viewModel: PendingsViewModel, studentName: String, screensNavigation: ScreensNavigation){
+fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavigation){
     val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
     Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp) ) {
-        PendingsHeader(Modifier.align(Alignment.CenterHorizontally), studentName)
+        PendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            Pendings(studentsList, modifier = Modifier)
+            Pendings(student.pendingDevolutions, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -63,7 +64,7 @@ fun PendingsHeader(modifier: Modifier, studentName: String) {
 }
 
 @Composable
-fun Pendings(students: List<Student>, modifier: Modifier) {
+fun Pendings(pendingDevolutions: List<PendingElement>, modifier: Modifier) {
     LazyColumn (
         modifier = modifier
             .fillMaxSize()
@@ -76,11 +77,11 @@ fun Pendings(students: List<Student>, modifier: Modifier) {
                 PendingsTableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
             }
         }
-        items(students) {student ->
+        items(pendingDevolutions) {element ->
             Row (modifier = modifier.fillMaxWidth()) {
-                PendingsTableCell(text = student.name, weight = 1f, modifier = modifier)
-                PendingsTableCell(text = student.padron.toString(), weight = 1f, modifier = modifier)
-                PendingsTableCell(text = student.pendingDevolutions.toString(), weight = 1f, modifier = modifier)
+                PendingsTableCell(text = element.element.name, weight = 1f, modifier = modifier)
+                PendingsTableCell(text = element.quantity.toString()<, weight = 1f, modifier = modifier)
+                PendingsTableCell(text = element.devolutionDate.toString(), weight = 1f, modifier = modifier)
             }
         }
     }
