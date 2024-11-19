@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestordeinventario.model.Student
-import com.example.gestordeinventario.model.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -30,14 +29,12 @@ class StudentsListViewModel: ViewModel() {
             val result: List<Student> = withContext(Dispatchers.IO) {
                 getAllUsers()
             }
-            Log.d("REPOTAG", "Students: $result")
             _studentsList.value = result
         }
     }
     private suspend fun getAllUsers(): List<Student> {
         return try {
             Firebase.firestore.collection("users").get().await().documents.mapNotNull { snapshot ->
-                Log.d("REPOTAG", "Student snapshot: $snapshot")
                 snapshot.toObject(Student::class.java)
             }
         } catch(e: Exception) {
