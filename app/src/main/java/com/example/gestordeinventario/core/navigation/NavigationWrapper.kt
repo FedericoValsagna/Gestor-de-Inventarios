@@ -14,7 +14,7 @@ import com.example.gestordeinventario.ui.registration.RegistrationScreen
 import com.example.gestordeinventario.ui.registration.RegistrationViewModel
 import com.example.gestordeinventario.ui.students_list.LendingsViewModel
 import com.example.gestordeinventario.ui.students_list.PendingsViewModel
-import com.example.gestordeinventario.ui.students_list.Student
+import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.students_list.StudentsListScreen
 import com.example.gestordeinventario.ui.students_list.StudentsListViewModel
 
@@ -39,9 +39,9 @@ fun NavigationWrapper() {
         composable<StudentsList> {
             val viewModel = StudentsListViewModel()
 
-            for (i in 1..99) {
-                viewModel.addStudent(Student("Alumno $i", i*100000, i, i*2))
-            }
+//            for (i in 1..99) {
+//                viewModel.addStudent(Student("Alumno $i", i*100000, i, i*2))
+//            }
             StudentsListScreen(viewModel, screensNavigation)
         }
 
