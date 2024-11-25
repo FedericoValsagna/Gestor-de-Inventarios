@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,10 +51,14 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
 
     val email: String by viewModel.email.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
+    val name: String by viewModel.name.observeAsState(initial = "")
+    val padron: String by viewModel.padron.observeAsState(initial = "")
     var passwordRepeat: String
     val registrationEnable: Boolean by viewModel.registrationEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val couroutineScope = rememberCoroutineScope()
+
+
 
     if(isLoading){
         Box(Modifier.fillMaxSize()){
@@ -66,11 +71,15 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
             Spacer(modifier = Modifier.padding(16.dp))
             HeaderImage(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
-            EmailField(email) { viewModel.onRegistrationChanged(it, password) }
+            EmailField(email) { viewModel.onRegistrationChanged(it, password, name, padron) }
             Spacer(modifier = Modifier.padding(4.dp))
-            PasswordField(password) { viewModel.onRegistrationChanged(email, it) }
+            PasswordField(password) { viewModel.onRegistrationChanged(email, it, name, padron) }
             Spacer(modifier = Modifier.padding(4.dp))
             passwordRepeat = repeatPasswordField()
+            Spacer(modifier = Modifier.padding(4.dp))
+            NameField(name) { viewModel.onRegistrationChanged(email, password, it, padron)}
+            Spacer(modifier = Modifier.padding(4.dp))
+            PadronField(padron) { viewModel.onRegistrationChanged(email, password, name, it) }
             Spacer(modifier = Modifier.padding(16.dp))
             RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
                 couroutineScope.launch { viewModel.onRegistrationSelected()
@@ -185,6 +194,45 @@ fun EmailField(email : String, onTextFieldChanged: (String) -> Unit) {
         )
     )
 }
+
+@Composable
+fun NameField(username: String, onTextFieldChanged: (String) -> Unit) {
+    TextField(
+        value = username,
+        onValueChange = { onTextFieldChanged(it) },
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(text = "Ingresar nombre") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        singleLine = true,
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color(0xFF484747),
+            focusedContainerColor = Color(0xFFDCDCDC),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
+fun PadronField(padron: String, onTextFieldChanged: (String) -> Unit) {
+    TextField(
+        value = padron,
+        onValueChange = { onTextFieldChanged(it) },
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(text = "Ingresar padron") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        singleLine = true,
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color(0xFF484747),
+            focusedContainerColor = Color(0xFFDCDCDC),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
+    )
+}
+
 
 @Composable
 fun HeaderImage(modifier: Modifier) {
