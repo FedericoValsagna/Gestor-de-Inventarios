@@ -22,12 +22,12 @@ import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.ui.common.LogoutButton
 
 @Composable
-fun HomeScreen(accessPrivileges: String, screensNavigation: ScreensNavigation){
+fun HomeScreen(padron: String, isProfessor: Boolean, screensNavigation: ScreensNavigation){
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        if(accessPrivileges == "admin"){
+        if(isProfessor){
             HomeAdmins(modifier = Modifier.align(Alignment.Center), screensNavigation = screensNavigation)
         }
         else {

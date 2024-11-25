@@ -25,11 +25,25 @@ class StudentRepository {
         return instance(Firebase.firestore.document("users/$id").get().await().toObject<StudentDataClass>())
     }
 
+    suspend fun getByAuthId(authId: String): Student? {
+        val students = this.getAll()
+        students.forEach { student ->
+            if (student.authId == authId) {
+                return student
+            }
+        }
+        return null
+    }
+    fun save(student: Student) {
+        Firebase.firestore.collection("users").document(student.padron).set(student)
+    }
+
     private suspend fun instance(dataClass: StudentDataClass?): Student? {
         dataClass ?: return null
         dataClass.name ?: return null
         dataClass.padron ?: return null
+        dataClass.authId ?: return null
         val pendingDevolutions = PendingElementRepository().getSome(dataClass.pendingDevolutions) ?: ArrayList()
-        return Student(dataClass.name, dataClass.padron, pendingDevolutions)
+        return Student(dataClass.name, dataClass.padron, pendingDevolutions, dataClass.authId)
     }
 }

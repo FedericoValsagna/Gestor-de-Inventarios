@@ -12,7 +12,7 @@ import kotlinx.coroutines.tasks.await
 class ElementRepository {
     suspend fun getAll(): List<Element> {
         return try {
-            Firebase.firestore.collection("elements").get().await().documents.mapNotNull { snapshot ->
+            Firebase.firestore.collection("element").get().await().documents.mapNotNull { snapshot ->
                 val dataClass = snapshot.toObject(ElementDataClass::class.java)
                 instance(dataClass)
             }

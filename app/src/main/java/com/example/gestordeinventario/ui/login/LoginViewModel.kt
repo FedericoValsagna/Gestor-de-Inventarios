@@ -1,12 +1,16 @@
 package com.example.gestordeinventario.ui.login
 
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.Authenticator
 import com.example.gestordeinventario.model.LoginResponse
-import kotlinx.coroutines.delay
+import com.example.gestordeinventario.model.Professor
+import com.example.gestordeinventario.repository.ProfessorRepository
+import com.example.gestordeinventario.repository.StudentRepository
 
 class LoginViewModel : ViewModel() {
     private val _email = MutableLiveData<String>()
@@ -32,14 +36,40 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    suspend fun onLoginSelected() {
+    suspend fun onLoginSelected(screensNavigation: ScreensNavigation) {
         _isLoading.value = true
         if (_email.value != null && _password.value != null) {
-            when(Authenticator().login(_email.value, _password.value)) {
-                LoginResponse.SUCESSFUL -> { _isLoading.value = false}
-                LoginResponse.INVALID_EMAIL -> {}
-                LoginResponse.INVALID_PASSWORD -> {}
-                LoginResponse.OTHER_ERROR -> {}
+            when(val response = Authenticator().login(_email.value, _password.value)) {
+                LoginResponse.SUCCESSFUL -> {
+                    val responseId = response.id
+                    Log.i("LOGIN", "LOGIN SUCCESFUL | AuthId: $responseId")
+                    if (responseId != null){
+                        _isLoading.value = false
+                        val student = StudentRepository().getByAuthId(responseId)
+                        if (student != null){
+                            Log.i("LOGIN", "STUDENT FOUND | Student: $student")
+                            screensNavigation.navigateToHome(student.padron, false)
+                        } else {
+                            val professor = ProfessorRepository().getByAuthId(responseId)
+                            if (professor != null){
+                                Log.i("LOGIN", "PROFESSOR FOUND | Professor: $professor")
+                                screensNavigation.navigateToHome(professor.padron, true)
+                            } else {
+                                Log.i("LOGIN"  ,"PROFESSOR NOT FOUND")
+                                screensNavigation.navigateToHome("106010", true)
+                            }
+                        }
+                    }
+                }
+                LoginResponse.INVALID_EMAIL -> {
+                    _isLoading.value = false
+                }
+                LoginResponse.INVALID_PASSWORD -> {
+                    _isLoading.value = false
+                }
+                LoginResponse.OTHER_ERROR -> {
+                    _isLoading.value = false
+                }
             }
         }
         // delay(4000)

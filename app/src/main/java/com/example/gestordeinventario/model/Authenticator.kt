@@ -18,7 +18,9 @@ class Authenticator {
         try {
             val task = Firebase.auth.signInWithEmailAndPassword(email, password).await()
             Log.d("AUTHENTICATION", "Task value: $task")
-            return LoginResponse.SUCESSFUL
+            val response = LoginResponse.SUCCESSFUL
+            response.id = task.user?.uid
+            return response
         } catch (error: FirebaseAuthException) {
             when(error) {
                 is FirebaseAuthInvalidUserException -> return LoginResponse.INVALID_EMAIL
@@ -27,8 +29,18 @@ class Authenticator {
             }
         }
     }
+    suspend fun signIn(email: String?, password: String?): String?{
+        if (email == null || password == null) {
+            throw InvalidParameterException()
+        }
+        val result = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+        val user = result.user
+        val id = user?.uid
+        return id
+    }
 }
 
-enum class LoginResponse{
-    SUCESSFUL, INVALID_EMAIL, INVALID_PASSWORD, OTHER_ERROR
+
+enum class LoginResponse(var id: String?){
+    SUCCESSFUL(id=""), INVALID_EMAIL(id= null), INVALID_PASSWORD(id=null), OTHER_ERROR(id=null)
 }

@@ -14,7 +14,6 @@ import com.example.gestordeinventario.ui.registration.RegistrationScreen
 import com.example.gestordeinventario.ui.registration.RegistrationViewModel
 import com.example.gestordeinventario.ui.students_list.LendingsViewModel
 import com.example.gestordeinventario.ui.students_list.PendingsViewModel
-import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.elements.ElementsListScreen
 import com.example.gestordeinventario.ui.elements.ElementsViewModel
 import com.example.gestordeinventario.ui.students_list.StudentsListScreen
@@ -35,7 +34,8 @@ fun NavigationWrapper() {
         }
 
         composable<Home>{
-            HomeScreen(accessPrivileges = "admin", screensNavigation)
+            val x: Home = it.toRoute()
+            HomeScreen(padron= x.padron, isProfessor = x.isProfessor, screensNavigation)
         }
 
         composable<StudentsList> {
