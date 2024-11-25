@@ -71,9 +71,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, screensNavigation: Scre
             SignIn(Modifier.align(Alignment.Start)) { screensNavigation.navigateToRegistration()}
             Spacer(modifier = Modifier.padding(16.dp))
             LoginButton(Modifier.align(Alignment.CenterHorizontally), loginEnable) {
-                    couroutineScope.launch { viewModel.onLoginSelected()
-                        screensNavigation.navigateToHome()
-                }
+                    couroutineScope.launch { viewModel.onLoginSelected(screensNavigation) }
             }
         }
     }

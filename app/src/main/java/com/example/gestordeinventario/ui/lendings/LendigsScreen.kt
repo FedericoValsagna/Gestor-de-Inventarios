@@ -40,7 +40,8 @@ import com.example.gestordeinventario.ui.common.TableQuantityCell
 fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavigation){
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
+    val screenWidth = configuration.screenWidthDp.dp
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), ""))
     val elementsList: List<Element> by viewModel.elementsList.observeAsState(initial= emptyList())
 
     Column(
