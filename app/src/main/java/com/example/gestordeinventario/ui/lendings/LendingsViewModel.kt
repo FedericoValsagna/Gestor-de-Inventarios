@@ -30,7 +30,6 @@ class LendingsViewModel(padron: String): ViewModel() {
     init {
         getUser(padron)
         getElements()
-        createPendingList()
     }
 
     private fun getUser(padron: String){
@@ -48,12 +47,18 @@ class LendingsViewModel(padron: String): ViewModel() {
                 ElementRepository().getAll()
             }
             _elementsList.value = result
+            createPendingList()
         }
     }
 
     private fun createPendingList(){
+        _pendingElements.value = ArrayList()
+
         _elementsList.value?.forEach { element ->
             _pendingElements.value?.add(PendingElement(0, element, Date()))
+            if(_pendingElements.value?.isEmpty()?:true){
+                    println("Debug trace: NO OK!")
+                }
         }
     }
 

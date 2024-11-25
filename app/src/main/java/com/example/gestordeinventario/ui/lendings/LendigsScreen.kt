@@ -18,9 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +25,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
-import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.students_list.LendingsViewModel
@@ -40,7 +36,8 @@ import com.example.gestordeinventario.ui.common.TableQuantityCell
 fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavigation){
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), "0"))
+    val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())
 
     Column(
         Modifier
@@ -50,7 +47,7 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            Lendings(viewModel = viewModel, modifier = Modifier)
+            Lendings(pendingsList = pendingsList, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -70,9 +67,14 @@ fun LendingsHeader(modifier: Modifier, studentName: String) {
 }
 
 @Composable
-fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
-    val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())
+fun Lendings(pendingsList: List<PendingElement>, modifier: Modifier) {
+/*    val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())*/
 
+    if(pendingsList.isEmpty())
+        println("Debug trace: vacía!")
+    else{
+        println("Debug trace: no vacía!")
+    }
     LazyColumn (
         modifier = modifier
             .fillMaxSize()
@@ -95,15 +97,15 @@ fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
                     weight = 1f,
                     modifier = modifier,
                     quantity = pending.quantity,
-                    onIncrement = {viewModel.pendingElementQuantityInc(pending.element.name)},
-                    onDecrement = {viewModel.pendingElementQuantityDec(pending.element.name) }
+                    onIncrement = {/*viewModel.pendingElementQuantityInc(pending.element.name)*/},
+                    onDecrement = {/*viewModel.pendingElementQuantityDec(pending.element.name) */}
                 )
                 TableQuantityCell(
                     weight = 1f,
                     modifier = modifier,
                     quantity = pending.devolutionDate.time.toInt(),
-                    onIncrement = {viewModel.pendingElementDaysInc(pending.element.name)},
-                    onDecrement = {viewModel.pendingElementDaysDec(pending.element.name)}
+                    onIncrement = {/*viewModel.pendingElementDaysInc(pending.element.name)*/},
+                    onDecrement = {/*viewModel.pendingElementDaysDec(pending.element.name)*/}
                 )
             }
         }
