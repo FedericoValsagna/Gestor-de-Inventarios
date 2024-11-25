@@ -65,7 +65,7 @@ class LendingsViewModel(padron: String): ViewModel() {
         return calendar.time
     }
 
-    public fun pendingElementQuantityInc(elementName: String){
+    fun pendingElementQuantityInc(elementName: String){
         val pendings = pendingElements.value
 
         pendings?.forEach { pending ->
@@ -75,18 +75,19 @@ class LendingsViewModel(padron: String): ViewModel() {
         }
     }
 
-    public fun pendingElementQuantityDec(elementName: String){
+    fun pendingElementQuantityDec(elementName: String){
         val pendings = pendingElements.value
 
         pendings?.forEach { pending ->
             if(pending.element.name == elementName){
-                if(pending.quantity > 0)
-                pending.quantity--
+                if(pending.quantity > 0){
+                    pending.quantity--
+                }
             }
         }
     }
 
-    public fun pendingElementDaysInc(elementName: String){
+    fun pendingElementDaysInc(elementName: String){
         val pendings = pendingElements.value
 
         pendings?.forEach { pending ->
@@ -96,7 +97,7 @@ class LendingsViewModel(padron: String): ViewModel() {
         }
     }
 
-    public fun pendingElementDaysDec(elementName: String){
+    fun pendingElementDaysDec(elementName: String){
         val pendings = pendingElements.value
 
         pendings?.forEach { pending ->

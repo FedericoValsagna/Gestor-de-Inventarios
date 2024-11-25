@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
@@ -47,7 +48,7 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            Lendings(pendingsList = pendingsList, modifier = Modifier)
+            Lendings(viewModel, pendingsList = pendingsList, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -67,7 +68,7 @@ fun LendingsHeader(modifier: Modifier, studentName: String) {
 }
 
 @Composable
-fun Lendings(pendingsList: List<PendingElement>, modifier: Modifier) {
+fun Lendings(viewModel: LendingsViewModel, pendingsList: List<PendingElement>, modifier: Modifier) {
 /*    val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())*/
 
     if(pendingsList.isEmpty())
@@ -97,15 +98,15 @@ fun Lendings(pendingsList: List<PendingElement>, modifier: Modifier) {
                     weight = 1f,
                     modifier = modifier,
                     quantity = pending.quantity,
-                    onIncrement = {/*viewModel.pendingElementQuantityInc(pending.element.name)*/},
-                    onDecrement = {/*viewModel.pendingElementQuantityDec(pending.element.name) */}
+                    onIncrement = {viewModel.pendingElementQuantityInc(pending.element.name)},
+                    onDecrement = {viewModel.pendingElementQuantityDec(pending.element.name)}
                 )
                 TableQuantityCell(
                     weight = 1f,
                     modifier = modifier,
                     quantity = pending.devolutionDate.time.toInt(),
-                    onIncrement = {/*viewModel.pendingElementDaysInc(pending.element.name)*/},
-                    onDecrement = {/*viewModel.pendingElementDaysDec(pending.element.name)*/}
+                    onIncrement = {viewModel.pendingElementDaysInc(pending.element.name)},
+                    onDecrement = {viewModel.pendingElementDaysDec(pending.element.name)}
                 )
             }
         }
