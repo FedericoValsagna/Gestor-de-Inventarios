@@ -1,19 +1,18 @@
 package com.example.gestordeinventario.ui.pendings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,14 +29,16 @@ import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.students_list.PendingsViewModel
 import com.example.gestordeinventario.model.Student
+import com.example.gestordeinventario.ui.common.TableCell
 
 @Composable
 fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavigation){
-    val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
     val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), ""))
+
     Column(
         Modifier
             .fillMaxSize()
@@ -72,34 +73,17 @@ fun Pendings(pendingDevolutions: List<PendingElement>, modifier: Modifier) {
     ) {
         item {
             Row(Modifier.background(Color.Gray)) {
-                PendingsTableCell(text = "Elemento", weight = 1f, modifier = modifier)
-                PendingsTableCell(text = "Cantidad", weight = 1f, modifier = modifier)
-                PendingsTableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
+                TableCell(text = "Elemento", weight = 1f, modifier = modifier)
+                TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
+                TableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
             }
         }
         items(pendingDevolutions) {element ->
             Row (modifier = modifier.fillMaxWidth()) {
-                PendingsTableCell(text = element.element.name, weight = 1f, modifier = modifier)
-                PendingsTableCell(text = element.quantity.toString(), weight = 1f, modifier = modifier)
-                PendingsTableCell(text = element.devolutionDate.toString(), weight = 1f, modifier = modifier)
+                TableCell(text = element.element.name, weight = 1f, modifier = modifier)
+                TableCell(text = element.quantity.toString(), weight = 1f, modifier = modifier)
+                TableCell(text = element.devolutionDate.toString(), weight = 1f, modifier = modifier)
             }
         }
     }
-}
-
-@Composable
-fun RowScope.PendingsTableCell(
-    text: String,
-    weight: Float,
-    modifier: Modifier
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .border(1.dp, Color.White)
-            .weight(weight)
-            .padding(8.dp)
-            .size(52.dp)
-            .align(Alignment.CenterVertically)
-    )
 }

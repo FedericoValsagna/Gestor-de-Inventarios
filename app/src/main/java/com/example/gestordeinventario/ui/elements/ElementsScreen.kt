@@ -1,4 +1,4 @@
-package com.example.gestordeinventario.ui.students_list
+package com.example.gestordeinventario.ui.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,44 +23,53 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
-import com.example.gestordeinventario.model.Student
+import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.common.TableCell
 import com.example.gestordeinventario.ui.common.TableClickableCell
 
 @Composable
-fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: ScreensNavigation){
-    val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
+fun ElementsListScreen(viewModel: ElementsViewModel, screensNavigation: ScreensNavigation) {
+    val elementsList: List<Element> by viewModel.elementsList.observeAsState(initial = emptyList())
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
 
     Column(
         Modifier
             .fillMaxSize()
-            .padding(16.dp) ) {
-        StudentListHeader(Modifier.align(Alignment.CenterHorizontally))
+            .padding(16.dp)
+    ) {
+        ElementsListHeader(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.8f)){
-            StudentList(students = studentsList, modifier = Modifier, screensNavigation = screensNavigation)
+        Box(Modifier.height(screenHeight * 0.8f)) {
+            ElementsList(
+                elements = elementsList,
+                modifier = Modifier,
+                screensNavigation = screensNavigation
+            )
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
-        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
+        LogoutButton(modifier = Modifier.align(Alignment.Start)) { screensNavigation.restart() }
     }
 }
 
 @Composable
-fun StudentListHeader(modifier: Modifier) {
+fun ElementsListHeader(modifier: Modifier) {
     Text(
-        text = "Listado de Alumnos",
+        text = "Elementos",
         fontSize = 24.sp,
         modifier = modifier.padding(vertical = 16.dp)
     )
 }
 
 @Composable
-fun StudentList(students: List<Student>, modifier: Modifier, screensNavigation: ScreensNavigation) {
+fun ElementsList(
+    elements: List<Element>,
+    modifier: Modifier,
+    screensNavigation: ScreensNavigation
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -68,31 +77,27 @@ fun StudentList(students: List<Student>, modifier: Modifier, screensNavigation: 
     ) {
         item {
             Row(Modifier.background(Color.Gray)) {
-                TableCell(text = "Alumno", weight = 1f, modifier = modifier)
-                TableCell(text = "Padrón", weight = 1f, modifier = modifier)
-                TableCell(text = "Pendientes", weight = 1f, modifier = modifier)
-                TableCell(text = "Prestaciones", weight = 1f, modifier = modifier)
+                TableCell(text = "Nombre", weight = 1f, modifier = modifier)
+                TableCell(text = "Stock", weight = 1f, modifier = modifier)
+                TableCell(text = "Proveedores", weight = 1f, modifier = modifier)
             }
         }
-        items(students) { student ->
+        items(elements) { element ->
             Row(modifier = modifier.fillMaxWidth()) {
-                TableCell(text = student.name, weight = 1f, modifier = modifier)
                 TableCell(
-                    text = student.padron,
+                    text = element.name,
+                    weight = 1f,
+                    modifier = modifier)
+                TableCell(
+                    text = element.totalQuantity.toString(),
                     weight = 1f,
                     modifier = modifier
                 )
                 TableClickableCell(
-                    text = "Pendientes",
+                    text = "Proveedores",
                     weight = 1f,
                     modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToPendings(student.padron)}
-                )
-                TableClickableCell(
-                    text = "Prestaciones",
-                    weight = 1f,
-                    modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToLendings(student.padron)}
+                    navigateToScreen = { screensNavigation.navigateToPendings(element.name) }
                 )
             }
         }

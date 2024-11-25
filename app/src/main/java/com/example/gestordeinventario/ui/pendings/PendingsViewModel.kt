@@ -12,7 +12,6 @@ import kotlinx.coroutines.withContext
 
 class PendingsViewModel(padron: String): ViewModel() {
     private val _studentsList = MutableLiveData< List<Student> >()
-    val studentsList : LiveData< List<Student> > = _studentsList
     private val _student: MutableLiveData<Student> = MutableLiveData<Student>()
     val student: LiveData<Student> = _student
     init{
