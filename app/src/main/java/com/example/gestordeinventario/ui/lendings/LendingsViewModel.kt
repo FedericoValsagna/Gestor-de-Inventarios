@@ -65,13 +65,23 @@ class LendingsViewModel(padron: String): ViewModel() {
         return calendar.time
     }
 
-    fun pendingElementQuantityInc(elementName: String){
-        val pendings = pendingElements.value
+    fun pendingElementQuantityInc(pendingIn: PendingElement){
+        val pendings = _pendingElements.value
+        var i = 0
 
-        pendings?.forEach { pending ->
-            if(pending.element.name == elementName){
-                pending.quantity++
+        if(pendings != null) {
+            pendingIn.quantity++
+            pendings.forEachIndexed { index, pending ->
+                if (pending.element.name == pendingIn.element.name) {
+                    pendings[index] = pending
+                    i = index
+                    println("Debug Trace index: ${index}")
+                }
             }
+            println("Debug Trace pendingIn.quantity: ${pendingIn.quantity}")
+            println("Debug Trace pendings.get(i).quantity: ${pendings.get(i).quantity}")
+            _pendingElements.value = pendings!!
+            println("Debug Trace _pendingElements.value.get(i).quantity: ${_pendingElements.value?.get(i)?.quantity}")
         }
     }
 

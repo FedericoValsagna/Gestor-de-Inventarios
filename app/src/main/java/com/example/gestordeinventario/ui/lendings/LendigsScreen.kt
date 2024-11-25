@@ -18,6 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,7 +52,7 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            Lendings(viewModel, pendingsList = pendingsList, modifier = Modifier)
+            Lendings(viewModel, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -68,8 +72,8 @@ fun LendingsHeader(modifier: Modifier, studentName: String) {
 }
 
 @Composable
-fun Lendings(viewModel: LendingsViewModel, pendingsList: List<PendingElement>, modifier: Modifier) {
-/*    val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())*/
+fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
+   val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())
 
     if(pendingsList.isEmpty())
         println("Debug trace: vacía!")
@@ -89,6 +93,9 @@ fun Lendings(viewModel: LendingsViewModel, pendingsList: List<PendingElement>, m
             }
         }
         items(pendingsList) { pending ->
+            var quantity by remember {mutableStateOf(0)}
+            var days by remember {mutableStateOf(0)}
+
             Row(modifier = modifier.fillMaxWidth()) {
                 TableCell(
                     text = pending.element.name,
@@ -97,16 +104,16 @@ fun Lendings(viewModel: LendingsViewModel, pendingsList: List<PendingElement>, m
                 TableQuantityCell(
                     weight = 1f,
                     modifier = modifier,
-                    quantity = pending.quantity,
-                    onIncrement = {viewModel.pendingElementQuantityInc(pending.element.name)},
-                    onDecrement = {viewModel.pendingElementQuantityDec(pending.element.name)}
+                    quantity = quantity,
+                    onIncrement = {viewModel.pendingElementQuantityInc(pending); quantity++},
+                    onDecrement = {viewModel.pendingElementQuantityDec(pending.element.name); if(quantity > 0){quantity--}}
                 )
                 TableQuantityCell(
                     weight = 1f,
                     modifier = modifier,
-                    quantity = pending.devolutionDate.time.toInt(),
-                    onIncrement = {viewModel.pendingElementDaysInc(pending.element.name)},
-                    onDecrement = {viewModel.pendingElementDaysDec(pending.element.name)}
+                    quantity = days,
+                    onIncrement = {viewModel.pendingElementDaysInc(pending.element.name); days++},
+                    onDecrement = {viewModel.pendingElementDaysDec(pending.element.name); if(days > 0){days--}}
                 )
             }
         }
