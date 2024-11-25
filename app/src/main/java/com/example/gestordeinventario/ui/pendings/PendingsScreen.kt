@@ -33,7 +33,6 @@ import com.example.gestordeinventario.ui.common.TableCell
 
 @Composable
 fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavigation){
-    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
