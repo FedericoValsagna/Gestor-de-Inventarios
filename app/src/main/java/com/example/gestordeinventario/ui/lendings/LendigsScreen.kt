@@ -41,7 +41,6 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
-    val elementsList: List<Element> by viewModel.elementsList.observeAsState(initial= emptyList())
 
     Column(
         Modifier
@@ -51,12 +50,12 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            Lendings(elementsList, student.pendingDevolutions, modifier = Modifier)
+            Lendings(viewModel = viewModel, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
-//        Spacer(modifier = Modifier.padding(8.dp))
-//        PendingAcceptButton(modifier = Modifier.align(Alignment.CenterHorizontally))
+        Spacer(modifier = Modifier.padding(8.dp))
+        PendingAcceptButton(modifier = Modifier.align(Alignment.CenterHorizontally))
         LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
     }
 }
@@ -71,7 +70,9 @@ fun LendingsHeader(modifier: Modifier, studentName: String) {
 }
 
 @Composable
-fun Lendings(elements: List<Element>, pendings: List<PendingElement>, modifier: Modifier) {
+fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
+    val pendingsList: List<PendingElement> by viewModel.pendingElements.observeAsState(initial= emptyList())
+
     LazyColumn (
         modifier = modifier
             .fillMaxSize()
@@ -84,48 +85,28 @@ fun Lendings(elements: List<Element>, pendings: List<PendingElement>, modifier: 
                 TableCell(text = "Tiempo", weight = 1f, modifier = modifier)
             }
         }
-        items(elements) { element ->
+        items(pendingsList) { pending ->
             Row(modifier = modifier.fillMaxWidth()) {
-                val daysInitValue = 0 /* if(pendings.any { it.element.name == element.name }) pendings.first { it.element.name == element.name }.devolutionDate.date else 0 */
-                val elementsQuantityInitValue = 9
-                var days by remember {mutableIntStateOf(daysInitValue)}
-                var elementsQuantity by remember { mutableIntStateOf(if(pendings.any { it.element.name == element.name }) 9 else 0) }
-
-//                if(pendings.any { it.element.name == element.name }){
-//                    elementsQuantity = pendings.first{it.element.name == element.name }.quantity
-//                }
-//                else {
-//                    elementsQuantity = 0
-//                }
-
                 TableCell(
-                    text = element.name,
+                    text = pending.element.name,
                     weight = 1f,
                     modifier = modifier)
                 TableQuantityCell(
                     weight = 1f,
                     modifier = modifier,
-                    quantity = elementsQuantity,
-                    onIncrement = {elementsQuantity++},
-                    onDecrement = { if(elementsQuantity > 0) {elementsQuantity-- } }
+                    quantity = pending.quantity,
+                    onIncrement = {viewModel.pendingElementQuantityInc(pending.element.name)},
+                    onDecrement = {viewModel.pendingElementQuantityDec(pending.element.name) }
                 )
                 TableQuantityCell(
                     weight = 1f,
                     modifier = modifier,
-                    quantity = days,
-                    onIncrement = {days++},
-                    onDecrement = { if(days > 0) {days-- } }
+                    quantity = pending.devolutionDate.time.toInt(),
+                    onIncrement = {viewModel.pendingElementDaysInc(pending.element.name)},
+                    onDecrement = {viewModel.pendingElementDaysDec(pending.element.name)}
                 )
             }
         }
-    }
-}
-
-fun LendigsGetPendingsElementQuantity(element: Element, pendings: List<PendingElement>): Int {
-    if (pendings.any { it.element.name == element.name }) {
-        return pendings.first { it.element.name == element.name }.quantity
-    } else {
-        return 0
     }
 }
 
