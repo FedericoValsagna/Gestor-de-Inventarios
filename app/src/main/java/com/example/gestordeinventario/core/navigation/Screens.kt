@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 object Login
 
 @Serializable
-object Home
+data class Home(val padron: String, val isProfessor: Boolean)
 
 @Serializable
 object Registration
@@ -26,7 +26,7 @@ data class Pendings(val studentName: String)
 
 class ScreensNavigation(val navController: NavController) {
     fun navigateToLogin() = navController.navigate(Login)
-    fun navigateToHome() = navController.navigate(Home)
+    fun navigateToHome(padron: String, isProfessor: Boolean) = navController.navigate(Home(padron, isProfessor))
     fun navigateToRegistration() = navController.navigate(Registration)
     fun navigateToStudentsList() = navController.navigate(StudentsList)
     fun navigateToElements() = navController.navigate(Elements)

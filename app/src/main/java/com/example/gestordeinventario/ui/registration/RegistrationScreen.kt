@@ -3,6 +3,7 @@ package com.example.gestordeinventario.ui.registration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -53,6 +55,7 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
     val password: String by viewModel.password.observeAsState(initial = "")
     val name: String by viewModel.name.observeAsState(initial = "")
     val padron: String by viewModel.padron.observeAsState(initial = "")
+    val isAdmin: Boolean by viewModel.isAdmin.observeAsState(initial = false)
     var passwordRepeat: String
     val registrationEnable: Boolean by viewModel.registrationEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
@@ -69,17 +72,19 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
         Column(modifier = modifier) {
             HeaderText(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
-            HeaderImage(Modifier.align(Alignment.CenterHorizontally))
+            // HeaderImage(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
-            EmailField(email) { viewModel.onRegistrationChanged(it, password, name, padron) }
+            EmailField(email) { viewModel.onRegistrationChanged(it, password, name, padron, isAdmin) }
             Spacer(modifier = Modifier.padding(4.dp))
-            PasswordField(password) { viewModel.onRegistrationChanged(email, it, name, padron) }
+            PasswordField(password) { viewModel.onRegistrationChanged(email, it, name, padron, isAdmin) }
             Spacer(modifier = Modifier.padding(4.dp))
             passwordRepeat = repeatPasswordField()
             Spacer(modifier = Modifier.padding(4.dp))
-            NameField(name) { viewModel.onRegistrationChanged(email, password, it, padron)}
+            NameField(name) { viewModel.onRegistrationChanged(email, password, it, padron, isAdmin)}
             Spacer(modifier = Modifier.padding(4.dp))
-            PadronField(padron) { viewModel.onRegistrationChanged(email, password, name, it) }
+            PadronField(padron) { viewModel.onRegistrationChanged(email, password, name, it, isAdmin) }
+            Spacer(modifier = Modifier.padding(4.dp))
+            AdminField(isAdmin) { viewModel.onRegistrationChanged(email, password, name, padron, it)}
             Spacer(modifier = Modifier.padding(16.dp))
             RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
                 couroutineScope.launch { viewModel.onRegistrationSelected()
@@ -233,6 +238,18 @@ fun PadronField(padron: String, onTextFieldChanged: (String) -> Unit) {
     )
 }
 
+@Composable
+fun AdminField(isAdmin: Boolean, onCheckedChanged: (Boolean) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically){
+        Text(
+            text = "Profesor: ",
+        )
+        Checkbox(
+            checked = isAdmin,
+            onCheckedChange = { onCheckedChanged(it) }
+        )
+    }
+}
 
 @Composable
 fun HeaderImage(modifier: Modifier) {
