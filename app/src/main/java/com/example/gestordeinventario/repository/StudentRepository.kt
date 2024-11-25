@@ -33,8 +33,8 @@ class StudentRepository {
         dataClass ?: return null
         dataClass.name ?: return null
         dataClass.padron ?: return null
-        dataClass.auth_id ?: return null
+        dataClass.authId ?: return null
         val pendingDevolutions = PendingElementRepository().getSome(dataClass.pendingDevolutions) ?: ArrayList()
-        return Student(dataClass.name, dataClass.padron, pendingDevolutions, dataClass.auth_id)
+        return Student(dataClass.name, dataClass.padron, pendingDevolutions, dataClass.authId)
     }
 }
