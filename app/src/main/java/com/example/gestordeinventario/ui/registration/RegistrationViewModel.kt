@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.gestordeinventario.model.Authenticator
 import com.example.gestordeinventario.model.PendingElement
+import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.model.User
+import com.example.gestordeinventario.repository.StudentRepository
 import kotlinx.coroutines.delay
 
 class RegistrationViewModel : ViewModel() {
@@ -35,8 +37,11 @@ class RegistrationViewModel : ViewModel() {
     private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
     suspend fun onRegistrationSelected() {
         _isLoading.value = true
-        val id = Authenticator().signIn("fedevalsag@hotmail.com", "123456")
-        // val user = User("Fede", "106011", List<PendingElement>(), id)
+        val auth_id = Authenticator().signIn("fedevalsag@hotmail.com", "123456")
+        if (auth_id != null) {
+            val student = Student("Fede", "106011", emptyList(), auth_id)
+            StudentRepository().save(student)
+        }
         delay(4000)
         _isLoading.value = false
     }

@@ -36,7 +36,7 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList()))
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), ""))
     Column(
         Modifier
             .fillMaxSize()

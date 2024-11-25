@@ -23,7 +23,7 @@ class LendingsViewModel(padron: String): ViewModel() {
     private fun getUser(padron: String){
         viewModelScope.launch{
             val result: Student = withContext(Dispatchers.IO) {
-                StudentRepository().getById(padron) ?: Student("Error", "", emptyList())
+                StudentRepository().getById(padron) ?: Student("Error", "", emptyList(), "")
             }
             _student.value = result
         }
