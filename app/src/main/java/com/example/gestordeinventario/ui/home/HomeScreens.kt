@@ -73,7 +73,7 @@ fun HomeAdminsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) 
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos"){screensNavigation.navigateToStudentsList()}
+        HomeButton(text = "Elementos"){screensNavigation.navigateToElements()}
         HomeButton(text = "Alumnos"){screensNavigation.navigateToStudentsList()}
     }
 
