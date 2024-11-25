@@ -25,7 +25,7 @@ class StudentRepository {
         return instance(Firebase.firestore.document("users/$id").get().await().toObject<StudentDataClass>())
     }
 
-    suspend fun save(student: Student) {
+    fun save(student: Student) {
         Firebase.firestore.collection("users").document(student.padron).set(student)
     }
 

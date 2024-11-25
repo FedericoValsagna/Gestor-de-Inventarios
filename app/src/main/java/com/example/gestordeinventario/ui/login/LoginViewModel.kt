@@ -4,6 +4,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.Authenticator
 import com.example.gestordeinventario.model.LoginResponse
 import kotlinx.coroutines.delay
@@ -32,14 +33,23 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    suspend fun onLoginSelected() {
+    suspend fun onLoginSelected(screensNavigation: ScreensNavigation) {
         _isLoading.value = true
         if (_email.value != null && _password.value != null) {
             when(Authenticator().login(_email.value, _password.value)) {
-                LoginResponse.SUCESSFUL -> { _isLoading.value = false}
-                LoginResponse.INVALID_EMAIL -> {}
-                LoginResponse.INVALID_PASSWORD -> {}
-                LoginResponse.OTHER_ERROR -> {}
+                LoginResponse.SUCESSFUL -> {
+                    _isLoading.value = false
+                    screensNavigation.navigateToHome()
+                }
+                LoginResponse.INVALID_EMAIL -> {
+                    _isLoading.value = false
+                }
+                LoginResponse.INVALID_PASSWORD -> {
+                    _isLoading.value = false
+                }
+                LoginResponse.OTHER_ERROR -> {
+                    _isLoading.value = false
+                }
             }
         }
         // delay(4000)
