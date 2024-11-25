@@ -1,18 +1,14 @@
 package com.example.gestordeinventario.ui.students_list
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -29,13 +25,14 @@ import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.LogoutButton
+import com.example.gestordeinventario.ui.common.TableCell
+import com.example.gestordeinventario.ui.common.TableClickableCell
 
 @Composable
 fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: ScreensNavigation){
     val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val screenWidth = configuration.screenWidthDp.dp
 
     Column(
         Modifier
@@ -71,73 +68,33 @@ fun StudentList(students: List<Student>, modifier: Modifier, screensNavigation: 
     ) {
         item {
             Row(Modifier.background(Color.Gray)) {
-                StudentListTableCell(text = "Alumno", weight = 1f, modifier = modifier)
-                StudentListTableCell(text = "Padrón", weight = 1f, modifier = modifier)
-                StudentListTableCell(text = "Pendientes", weight = 1f, modifier = modifier)
-                StudentListTableCell(text = "Prestaciones", weight = 1f, modifier = modifier)
+                TableCell(text = "Alumno", weight = 1f, modifier = modifier)
+                TableCell(text = "Padrón", weight = 1f, modifier = modifier)
+                TableCell(text = "Pendientes", weight = 1f, modifier = modifier)
+                TableCell(text = "Prestaciones", weight = 1f, modifier = modifier)
             }
         }
         items(students) { student ->
             Row(modifier = modifier.fillMaxWidth()) {
-                StudentListTableCell(text = student.name, weight = 1f, modifier = modifier)
-                StudentListTableCell(
-                    text = student.padron.toString(),
+                TableCell(text = student.name, weight = 1f, modifier = modifier)
+                TableCell(
+                    text = student.padron,
                     weight = 1f,
                     modifier = modifier
                 )
-                StudentListTableClickableCell(
+                TableClickableCell(
                     text = "Pendientes",
                     weight = 1f,
                     modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToPendings(student.padron)},
-                    navigateString = student.name
+                    navigateToScreen = {screensNavigation.navigateToPendings(student.padron)}
                 )
-                StudentListTableClickableCell(
+                TableClickableCell(
                     text = "Prestaciones",
                     weight = 1f,
                     modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToLendings(student.padron)},
-                    navigateString = student.name
+                    navigateToScreen = {screensNavigation.navigateToLendings(student.padron)}
                 )
             }
         }
     }
-}
-
-@Composable
-fun RowScope.StudentListTableClickableCell(
-    text: String,
-    weight: Float,
-    modifier: Modifier,
-    navigateToScreen : (String) -> Unit,
-    navigateString : String
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .clickable { navigateToScreen(navigateString) }
-            .border(1.dp, Color.White)
-            .weight(weight)
-            .padding(8.dp)
-            .size(52.dp)
-            .align(Alignment.CenterVertically),
-        color = Color(0xFF4EA8E9)
-    )
-}
-
-@Composable
-fun RowScope.StudentListTableCell(
-    text: String,
-    weight: Float,
-    modifier: Modifier
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .border(1.dp, Color.White)
-            .weight(weight)
-            .padding(8.dp)
-            .size(52.dp)
-            .align(Alignment.CenterVertically)
-    )
 }

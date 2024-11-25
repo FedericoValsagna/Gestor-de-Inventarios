@@ -108,21 +108,21 @@ fun HeaderText(modifier: Modifier) {
         text = "Gestor de Inventario",
         fontSize = 32.sp,
         modifier = modifier,
-        color = Color(0xFF2F3DA2)
+        color = Color(0xFF3986E5)
     )
     Spacer(modifier = Modifier.padding(8.dp))
     Text(
         text = "Laboratorio de Electrónica",
         fontSize = 28.sp,
         modifier = modifier,
-        color = Color(0xFF2F3DA2)
+        color = Color(0xFF3986E5)
     )
     Spacer(modifier = Modifier.padding(8.dp))
     Text(
         text = "Registrarse",
         fontSize = 28.sp,
         modifier = modifier,
-        color = Color(0xFF2F3DA2)
+        color = Color(0xFF3986E5)
     )
 }
 
