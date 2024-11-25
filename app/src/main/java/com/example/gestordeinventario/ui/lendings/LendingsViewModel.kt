@@ -1,7 +1,5 @@
 package com.example.gestordeinventario.ui.students_list
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -52,14 +50,11 @@ class LendingsViewModel(padron: String): ViewModel() {
     }
 
     private fun createPendingList(){
-        _pendingElements.value = ArrayList()
-
+        val pendingList = ArrayList<PendingElement>()
         _elementsList.value?.forEach { element ->
-            _pendingElements.value?.add(PendingElement(0, element, Date()))
-            if(_pendingElements.value?.isEmpty()?:true){
-                    println("Debug trace: NO OK!")
-                }
+            pendingList.add(PendingElement(0,element, Date()))
         }
+        _pendingElements.value = pendingList
     }
 
     //Sobrecarga de plus de date
