@@ -11,33 +11,17 @@ import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-class PendingElementRepository {
+class PendingElementRepository: Repository<PendingElementDataClass>() {
+    override val documentPath = "pendingElement"
     suspend fun getAll(): List<PendingElement> {
-        return try {
-            Firebase.firestore.collection("pendingElement").get().await().documents.mapNotNull { snapshot ->
-                val dataClass = snapshot.toObject(PendingElementDataClass::class.java)
-                instance(dataClass)
-            }
-        } catch(e: Exception) {
-            Log.i("REPOTAG", e.toString())
-            emptyList()
-        }
+        return ArrayList(this.internalGetAll<PendingElementDataClass>().mapNotNull { item -> instance(item) })
     }
     private suspend fun get(documentReference: DocumentReference) : PendingElement? {
         val path = documentReference.path
         return instance(Firebase.firestore.document(path).get().await().toObject<PendingElementDataClass>())
     }
     suspend fun getSome(documentReference: List<DocumentReference>?): List<PendingElement>? {
-        documentReference ?: return null
-        val result = ArrayList<PendingElement>()
-        for (document in documentReference) {
-            val x = this.get(document) ?: continue
-            result.add(x)
-        }
-        if (result.isEmpty()) {
-            return null
-        }
-        return result
+        return documentReference?.mapNotNull { this.get(it) }?.takeIf { it.isNotEmpty() }
     }
     private suspend fun instance(dataClass: PendingElementDataClass?): PendingElement? {
         dataClass ?: return null
