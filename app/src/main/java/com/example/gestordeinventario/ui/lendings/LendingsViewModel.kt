@@ -10,6 +10,8 @@ import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.ElementRepository
 import com.example.gestordeinventario.repository.StudentRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -19,11 +21,11 @@ class LendingsViewModel(padron: String): ViewModel() {
     private val _student: MutableLiveData<Student> = MutableLiveData<Student>()
     val student: LiveData<Student> = _student
 
-    private var _elementsList = MutableLiveData< List<Element> >()
+    private val _elementsList = MutableLiveData< List<Element> >()
     val elementsList : LiveData< List<Element> > = _elementsList
 
-    private var _pendingElements = MutableLiveData< ArrayList<PendingElement> >()
-    val pendingElements : LiveData< ArrayList<PendingElement> > = _pendingElements
+    private val _pendingElements = MutableStateFlow(ArrayList<PendingElement>())
+    val pendingElements : StateFlow< ArrayList<PendingElement> > = _pendingElements
 
     init {
         getUser(padron)
@@ -66,35 +68,33 @@ class LendingsViewModel(padron: String): ViewModel() {
     }
 
     fun pendingElementQuantityInc(pendingIn: PendingElement){
-        val pendings = _pendingElements.value
-        var i = 0
+        val pendings = ArrayList<PendingElement>()
 
-        if(pendings != null) {
-            pendingIn.quantity++
-            pendings.forEachIndexed { index, pending ->
-                if (pending.element.name == pendingIn.element.name) {
-                    pendings[index] = pending
-                    i = index
-                    println("Debug Trace index: ${index}")
-                }
+        _pendingElements.value.forEach{ pending ->
+            if (pending.element.name == pendingIn.element.name) {
+                val newPending = PendingElement(pending.quantity + 1, pending.element, pending.devolutionDate)
+                pendings.add(newPending)
             }
-            println("Debug Trace pendingIn.quantity: ${pendingIn.quantity}")
-            println("Debug Trace pendings.get(i).quantity: ${pendings.get(i).quantity}")
-            _pendingElements.value = pendings!!
-            println("Debug Trace _pendingElements.value.get(i).quantity: ${_pendingElements.value?.get(i)?.quantity}")
+            else{
+                pendings.add(pending)
+            }
         }
+        _pendingElements.value = pendings
     }
 
-    fun pendingElementQuantityDec(elementName: String){
-        val pendings = pendingElements.value
+    fun pendingElementQuantityDec(pendingIn: PendingElement){
+        val pendings = ArrayList<PendingElement>()
 
-        pendings?.forEach { pending ->
-            if(pending.element.name == elementName){
-                if(pending.quantity > 0){
-                    pending.quantity--
-                }
+        _pendingElements.value.forEach{ pending ->
+            if (pending.element.name == pendingIn.element.name && pending.quantity > 0) {
+                val newPending = PendingElement(pending.quantity - 1, pending.element, pending.devolutionDate)
+                pendings.add(newPending)
+            }
+            else{
+                pendings.add(pending)
             }
         }
+        _pendingElements.value = pendings
     }
 
     fun pendingElementDaysInc(elementName: String){
