@@ -16,8 +16,7 @@ class ElementRepository: Repository<ElementDataClass>() {
         return ArrayList(this.internalGetAll<ElementDataClass>().mapNotNull { item -> instance(item) })
     }
     suspend fun get(documentReference: DocumentReference) : Element? {
-        val path = documentReference.path
-        return instance(Firebase.firestore.document(path).get().await().toObject<ElementDataClass>())
+        return instance(Firebase.firestore.document(documentReference.path).get().await().toObject<ElementDataClass>())
     }
     private fun instance(dataClass: ElementDataClass?): Element? {
         dataClass ?: return null

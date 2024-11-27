@@ -20,13 +20,7 @@ class ProfessorRepository: Repository<ProfessorDataClass>() {
         Firebase.firestore.collection("professors").document(professor.padron).set(professor)
     }
     suspend fun getByAuthId(authId: String): Professor? {
-        val professors = this.getAll()
-        professors.forEach { professor ->
-            if (professor.authId == authId) {
-                return professor
-            }
-        }
-        return null
+        return this.getAll().find{ it.authId == authId}
     }
     private fun instance(dataClass: ProfessorDataClass?): Professor? {
         dataClass ?: return null

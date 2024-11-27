@@ -21,16 +21,7 @@ class PendingElementRepository: Repository<PendingElementDataClass>() {
         return instance(Firebase.firestore.document(path).get().await().toObject<PendingElementDataClass>())
     }
     suspend fun getSome(documentReference: List<DocumentReference>?): List<PendingElement>? {
-        documentReference ?: return null
-        val result = ArrayList<PendingElement>()
-        for (document in documentReference) {
-            val x = this.get(document) ?: continue
-            result.add(x)
-        }
-        if (result.isEmpty()) {
-            return null
-        }
-        return result
+        return documentReference?.mapNotNull { this.get(it) }?.takeIf { it.isNotEmpty() }
     }
     private suspend fun instance(dataClass: PendingElementDataClass?): PendingElement? {
         dataClass ?: return null

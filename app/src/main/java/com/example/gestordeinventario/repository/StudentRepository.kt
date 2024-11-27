@@ -19,13 +19,7 @@ class StudentRepository: Repository<StudentDataClass>() {
     }
 
     suspend fun getByAuthId(authId: String): Student? {
-        val students = this.getAll()
-        students.forEach { student ->
-            if (student.authId == authId) {
-                return student
-            }
-        }
-        return null
+        return this.getAll().find { it.authId == authId }
     }
     fun save(student: Student) {
         Firebase.firestore.collection("users").document(student.padron).set(student)
