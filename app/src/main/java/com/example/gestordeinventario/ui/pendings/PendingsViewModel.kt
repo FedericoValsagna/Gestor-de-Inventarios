@@ -1,4 +1,4 @@
-package com.example.gestordeinventario.ui.students_list
+package com.example.gestordeinventario.ui.pendings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

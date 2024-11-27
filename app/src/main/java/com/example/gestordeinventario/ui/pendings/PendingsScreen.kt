@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
-import com.example.gestordeinventario.ui.students_list.PendingsViewModel
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.TableCell
 

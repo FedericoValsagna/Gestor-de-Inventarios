@@ -12,8 +12,8 @@ import com.example.gestordeinventario.ui.login.LoginViewModel
 import com.example.gestordeinventario.ui.pendings.PendingsScreen
 import com.example.gestordeinventario.ui.registration.RegistrationScreen
 import com.example.gestordeinventario.ui.registration.RegistrationViewModel
-import com.example.gestordeinventario.ui.students_list.LendingsViewModel
-import com.example.gestordeinventario.ui.students_list.PendingsViewModel
+import com.example.gestordeinventario.ui.lendings.LendingsViewModel
+import com.example.gestordeinventario.ui.pendings.PendingsViewModel
 import com.example.gestordeinventario.ui.elements.ElementsListScreen
 import com.example.gestordeinventario.ui.elements.ElementsViewModel
 import com.example.gestordeinventario.ui.students_list.StudentsListScreen
