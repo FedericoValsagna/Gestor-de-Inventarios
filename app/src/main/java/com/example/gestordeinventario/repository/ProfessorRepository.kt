@@ -3,6 +3,7 @@ package com.example.gestordeinventario.repository
 import android.util.Log
 import com.example.gestordeinventario.model.Professor
 import com.example.gestordeinventario.model.Student
+import com.example.gestordeinventario.repository.dataclasses.ElementDataClass
 import com.example.gestordeinventario.repository.dataclasses.ProfessorDataClass
 import com.example.gestordeinventario.repository.dataclasses.StudentDataClass
 import com.google.firebase.firestore.ktx.firestore
@@ -10,17 +11,10 @@ import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-class ProfessorRepository {
+class ProfessorRepository: Repository<ProfessorDataClass>() {
+    override val documentPath = "professors"
     suspend fun getAll(): List<Professor> {
-        return try {
-            Firebase.firestore.collection("professors").get().await().documents.mapNotNull { snapshot ->
-                val dataClass = snapshot.toObject(ProfessorDataClass::class.java)
-                instance(dataClass)
-            }
-        } catch(e: Exception) {
-            Log.i("REPOTAG", e.toString())
-            emptyList()
-        }
+        return ArrayList(this.internalGetAll<ProfessorDataClass>().mapNotNull { item -> instance(item) })
     }
     fun save(professor: Professor) {
         Firebase.firestore.collection("professors").document(professor.padron).set(professor)
