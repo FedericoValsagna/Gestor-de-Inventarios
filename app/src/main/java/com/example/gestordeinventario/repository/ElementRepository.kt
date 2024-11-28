@@ -3,27 +3,20 @@ package com.example.gestordeinventario.repository
 import android.util.Log
 import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.repository.dataclasses.ElementDataClass
+import com.example.gestordeinventario.repository.dataclasses.StudentDataClass
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-class ElementRepository {
+class ElementRepository: Repository<ElementDataClass>() {
+    override val documentPath = "element"
     suspend fun getAll(): List<Element> {
-        return try {
-            Firebase.firestore.collection("element").get().await().documents.mapNotNull { snapshot ->
-                val dataClass = snapshot.toObject(ElementDataClass::class.java)
-                instance(dataClass)
-            }
-        } catch(e: Exception) {
-            Log.i("REPOTAG", e.toString())
-            emptyList()
-        }
+        return ArrayList(this.internalGetAll<ElementDataClass>().mapNotNull { item -> instance(item) })
     }
     suspend fun get(documentReference: DocumentReference) : Element? {
-        val path = documentReference.path
-        return instance(Firebase.firestore.document(path).get().await().toObject<ElementDataClass>())
+        return instance(Firebase.firestore.document(documentReference.path).get().await().toObject<ElementDataClass>())
     }
     private fun instance(dataClass: ElementDataClass?): Element? {
         dataClass ?: return null
