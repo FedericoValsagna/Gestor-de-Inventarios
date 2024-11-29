@@ -50,7 +50,7 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Spacer(modifier = Modifier.padding(8.dp))
-        PendingAcceptButton(viewModel = viewModel, modifier = Modifier.align(Alignment.CenterHorizontally))
+        LendingAcceptButton(viewModel = viewModel, modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(8.dp))
         LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
     }
@@ -107,7 +107,7 @@ fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
 }
 
 @Composable
-fun PendingAcceptButton(viewModel: LendingsViewModel ,modifier: Modifier) {
+fun LendingAcceptButton(viewModel: LendingsViewModel ,modifier: Modifier) {
     Button(
         onClick = { /* TODO */ },
         modifier = modifier

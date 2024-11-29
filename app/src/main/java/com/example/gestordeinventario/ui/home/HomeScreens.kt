@@ -83,7 +83,7 @@ fun HomeAdminsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) 
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         HomeButton(text = "Proveedores"){screensNavigation.navigateToStudentsList()}
-        HomeButton(text = "Vencimientos"){screensNavigation.navigateToStudentsList()}
+        HomeButton(text = "Vencimientos"){screensNavigation.navigateToDevolutions()}
     }
 }
 
@@ -93,8 +93,8 @@ fun HomeStudentsButtons(modifier: Modifier, screensNavigation: ScreensNavigation
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos"){screensNavigation.navigateToStudentsList()}
-        HomeButton(text = "Pendientes"){screensNavigation.navigateToStudentsList()}
+        HomeButton(text = "Elementos"){screensNavigation.navigateToElements()}
+        HomeButton(text = "Pendientes"){screensNavigation.navigateToPendings("")}
     }
     Spacer(modifier = modifier.height(16.dp))
 }

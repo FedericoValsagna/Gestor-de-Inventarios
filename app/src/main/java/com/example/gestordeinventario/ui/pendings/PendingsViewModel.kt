@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PendingsViewModel(padron: String): ViewModel() {
-    private val _studentsList = MutableLiveData< List<Student> >()
     private val _student: MutableLiveData<Student> = MutableLiveData<Student>()
     val student: LiveData<Student> = _student
+
     init{
         getUser(padron)
     }
@@ -23,6 +23,7 @@ class PendingsViewModel(padron: String): ViewModel() {
                 StudentRepository().getById(padron) ?: Student("Error", "", emptyList(), "")
             }
             _student.value = result
+            println("Debug trace: ${result.pendingDevolutions}")
         }
     }
 

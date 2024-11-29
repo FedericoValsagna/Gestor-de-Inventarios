@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,12 +30,14 @@ import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.TableCell
+import com.example.gestordeinventario.ui.common.getFormatDate
+import com.example.gestordeinventario.ui.lendings.LendingAcceptButton
+import com.example.gestordeinventario.ui.lendings.LendingsViewModel
 
 @Composable
 fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavigation){
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val screenWidth = configuration.screenWidthDp.dp
     val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), ""))
 
     Column(
@@ -44,11 +47,14 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
         PendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.8f)){
+        Box(Modifier.height(screenHeight*0.7f)){
             Pendings(student.pendingDevolutions, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
+        Spacer(modifier = Modifier.padding(8.dp))
+        PendingAcceptButton(viewModel = viewModel, modifier = Modifier.align(Alignment.CenterHorizontally))
+        Spacer(modifier = Modifier.padding(8.dp))
         LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
     }
 }
@@ -76,12 +82,30 @@ fun Pendings(pendingDevolutions: List<PendingElement>, modifier: Modifier) {
                 TableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
             }
         }
-        items(pendingDevolutions) {element ->
+        items(pendingDevolutions) {pendingElement ->
             Row (modifier = modifier.fillMaxWidth()) {
-                TableCell(text = element.element.name, weight = 1f, modifier = modifier)
-                TableCell(text = element.quantity.toString(), weight = 1f, modifier = modifier)
-                TableCell(text = element.devolutionDate.toString(), weight = 1f, modifier = modifier)
+                TableCell(text = pendingElement.element.name, weight = 1f, modifier = modifier)
+                TableCell(text = pendingElement.quantity.toString(), weight = 1f, modifier = modifier)
+                TableCell(text = getFormatDate(pendingElement.devolutionDate), weight = 1f, modifier = modifier)
             }
         }
+    }
+}
+
+@Composable
+fun PendingAcceptButton(viewModel: PendingsViewModel, modifier: Modifier) {
+    Button(
+        onClick = { /* TODO */ },
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF2F3DA2),
+            disabledContainerColor = Color(0xFF6F76AD),
+            contentColor = Color.White,
+            disabledContentColor = Color.White
+        )
+    ) {
+        Text(text = "Aceptar")
     }
 }

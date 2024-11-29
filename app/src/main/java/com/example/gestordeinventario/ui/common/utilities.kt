@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.text.DateFormat.MEDIUM
+import java.text.DateFormat.getDateInstance
 import java.util.Date
 
 @Composable
@@ -103,4 +105,9 @@ fun RowScope.TableQuantityCell(
             color = Color(0xFF4EA8E9)
         )
     }
+}
+
+fun getFormatDate(date: Date) : String {
+    val formatter = getDateInstance(MEDIUM)
+    return formatter.format(date).toString()
 }
