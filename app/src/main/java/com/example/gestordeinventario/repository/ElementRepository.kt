@@ -13,7 +13,7 @@ import kotlinx.coroutines.tasks.await
 class ElementRepository: Repository<ElementDataClass>() {
     override val documentPath = "element"
     suspend fun getAll(): List<Element> {
-        return ArrayList(this.internalGetAll<ElementDataClass>().mapNotNull { item -> instance(item) })
+        return ArrayList(this.internalGetAll<ElementDataClass>().mapNotNull { (item, _) -> instance(item) })
     }
     suspend fun get(documentReference: DocumentReference) : Element? {
         return instance(Firebase.firestore.document(documentReference.path).get().await().toObject<ElementDataClass>())

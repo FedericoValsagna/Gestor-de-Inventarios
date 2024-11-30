@@ -4,15 +4,17 @@ import android.util.Log
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.dataclasses.PendingElementDataClass
 import com.example.gestordeinventario.repository.dataclasses.StudentDataClass
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import org.w3c.dom.Document
 
 class StudentRepository: Repository<StudentDataClass>() {
     override val documentPath = "users"
     suspend fun getAll(): List<Student> {
-        return ArrayList(this.internalGetAll<StudentDataClass>().mapNotNull { item -> instance(item) })
+        return ArrayList(this.internalGetAll<StudentDataClass>().mapNotNull { (item, _) -> instance(item) })
     }
     suspend fun getById(id: String): Student? {
         return instance(Firebase.firestore.document("users/$id").get().await().toObject<StudentDataClass>())
@@ -22,7 +24,9 @@ class StudentRepository: Repository<StudentDataClass>() {
         return this.getAll().find { it.authId == authId }
     }
     fun save(student: Student) {
-        Firebase.firestore.collection("users").document(student.padron).set(student)
+        val pendingDevolutions = student.pendingDevolutions.mapNotNull { it.reference }
+        val dataclass = StudentDataClass(student.name, student.padron, pendingDevolutions, student.authId)
+        Firebase.firestore.collection("users").document(student.padron).set(dataclass)
     }
 
     private suspend fun instance(dataClass: StudentDataClass?): Student? {

@@ -29,13 +29,14 @@ import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.TableCell
+import java.util.ArrayList
 
 @Composable
 fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavigation){
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), ""))
+    val student: Student by viewModel.student.observeAsState(initial= Student("", "", ArrayList(), ""))
 
     Column(
         Modifier

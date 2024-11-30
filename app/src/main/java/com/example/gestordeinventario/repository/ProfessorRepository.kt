@@ -14,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 class ProfessorRepository: Repository<ProfessorDataClass>() {
     override val documentPath = "professors"
     suspend fun getAll(): List<Professor> {
-        return ArrayList(this.internalGetAll<ProfessorDataClass>().mapNotNull { item -> instance(item) })
+        return ArrayList(this.internalGetAll<ProfessorDataClass>().mapNotNull { (item, _) -> instance(item) })
     }
     fun save(professor: Professor) {
         Firebase.firestore.collection("professors").document(professor.padron).set(professor)
