@@ -1,24 +1,28 @@
 package com.example.gestordeinventario.ui.pendings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,14 +35,13 @@ import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.TableCell
 import com.example.gestordeinventario.ui.common.getFormatDate
-import com.example.gestordeinventario.ui.lendings.LendingAcceptButton
-import com.example.gestordeinventario.ui.lendings.LendingsViewModel
 
 @Composable
 fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavigation){
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val student: Student by viewModel.student.observeAsState(initial= Student("", "", emptyList(), ""))
+    val student: Student by viewModel.student.collectAsState()
+    val checkboxList by viewModel.pendingsCheckboxes.collectAsState()
 
     Column(
         Modifier
@@ -48,7 +51,7 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.7f)){
-            Pendings(student.pendingDevolutions, modifier = Modifier)
+            Pendings(student.pendingDevolutions, checkboxList = checkboxList, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -69,7 +72,11 @@ fun PendingsHeader(modifier: Modifier, studentName: String) {
 }
 
 @Composable
-fun Pendings(pendingDevolutions: List<PendingElement>, modifier: Modifier) {
+fun Pendings(
+    pendingDevolutions: List<PendingElement>,
+    checkboxList: ArrayList<PendingCheckedInfo>,
+    modifier: Modifier
+) {
     LazyColumn (
         modifier = modifier
             .fillMaxSize()
@@ -80,13 +87,16 @@ fun Pendings(pendingDevolutions: List<PendingElement>, modifier: Modifier) {
                 TableCell(text = "Elemento", weight = 1f, modifier = modifier)
                 TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
                 TableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
+                TableCell(text = "Entregado", weight = 1f, modifier = modifier)
             }
         }
-        items(pendingDevolutions) {pendingElement ->
+        itemsIndexed(pendingDevolutions) {index, pendingElement ->
             Row (modifier = modifier.fillMaxWidth()) {
                 TableCell(text = pendingElement.element.name, weight = 1f, modifier = modifier)
                 TableCell(text = pendingElement.quantity.toString(), weight = 1f, modifier = modifier)
                 TableCell(text = getFormatDate(pendingElement.devolutionDate), weight = 1f, modifier = modifier)
+                PendingCheckboxCell(checkboxList = checkboxList, pendingIndex = index, weight = 1f, modifier = modifier)
+
             }
         }
     }
@@ -107,5 +117,17 @@ fun PendingAcceptButton(viewModel: PendingsViewModel, modifier: Modifier) {
         )
     ) {
         Text(text = "Aceptar")
+    }
+}
+
+@Composable
+fun RowScope.PendingCheckboxCell(checkboxList: ArrayList<PendingCheckedInfo>, pendingIndex: Int, weight: Float, modifier: Modifier) {
+    Row(modifier = modifier.border(1.dp, Color.White).weight(weight).size(62.dp),
+        horizontalArrangement = Arrangement.Center) {
+        Checkbox(
+            checked = checkboxList[pendingIndex].isChecked,
+            onCheckedChange = {isChecked -> checkboxList[pendingIndex] = PendingCheckedInfo(isChecked, checkboxList[pendingIndex].pendingElementIndex)},
+            modifier = modifier
+        )
     }
 }

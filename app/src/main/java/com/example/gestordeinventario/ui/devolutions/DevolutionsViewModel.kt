@@ -31,6 +31,7 @@ class DevolutionsViewModel: ViewModel() {
                 PendingElementRepository().getAll()
             }
             _devolutionsList.value = result
+            println("Debug trace: DEVOLUTIONS SIZE: ${_devolutionsList.value.size}")
         }
     }
 }
