@@ -58,7 +58,7 @@ class RegistrationViewModel : ViewModel() {
                 val professor = Professor(name, padron, authId)
                 ProfessorRepository().save(professor)
             } else {
-                val student = Student(name, padron, emptyList(), authId)
+                val student = Student(name, padron, ArrayList(), authId)
                 StudentRepository().save(student)
             }
         }

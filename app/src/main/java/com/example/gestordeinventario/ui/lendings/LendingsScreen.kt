@@ -109,7 +109,7 @@ fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
 @Composable
 fun LendingAcceptButton(viewModel: LendingsViewModel, modifier: Modifier, resetLendingsScreen: () -> Unit) {
     Button(
-        onClick = { /* TODO */ resetLendingsScreen()},
+        onClick = { viewModel.submitPendingElements(); resetLendingsScreen()},
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp),

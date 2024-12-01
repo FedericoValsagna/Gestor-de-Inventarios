@@ -6,6 +6,7 @@ import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.ElementRepository
+import com.example.gestordeinventario.repository.PendingElementRepository
 import com.example.gestordeinventario.repository.StudentRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +17,8 @@ import java.util.Calendar
 import java.util.Date
 
 class LendingsViewModel(padron: String): ViewModel() {
-    private val _student = MutableStateFlow(Student("", "", emptyList(), ""))
-    val student: StateFlow<Student> = _student
+    private val _student = MutableStateFlow(Student("", "", ArrayList(), ""))
+    val student: MutableStateFlow<Student> = _student
 
     private val _elementsList = MutableStateFlow(List(0) { Element("", 0) })
 
@@ -34,7 +35,7 @@ class LendingsViewModel(padron: String): ViewModel() {
     private fun getUser(padron: String) {
         viewModelScope.launch {
             val result: Student = withContext(Dispatchers.IO) {
-                StudentRepository().getById(padron) ?: Student("Error", "", emptyList(), "")
+                StudentRepository().getById(padron) ?: Student("Error", "", ArrayList(), "")
             }
             _student.value = result
         }
@@ -140,6 +141,17 @@ class LendingsViewModel(padron: String): ViewModel() {
         }
         else {
             return diffInMillis / (1000 * 60 * 60 * 24) // Convertir milisegundos a días
+        }
+    }
+
+    fun submitPendingElements() {
+        viewModelScope.launch{
+            pendingElements.value.forEach{ pendingElement ->
+                if (pendingElement.quantity == 0) return@forEach
+                if (!pendingElement.element.request(pendingElement.quantity)) return@forEach
+                PendingElementRepository().save(pendingElement, student.value)
+                ElementRepository().save(pendingElement.element)
+            }
         }
     }
 }

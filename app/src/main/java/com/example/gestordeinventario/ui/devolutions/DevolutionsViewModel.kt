@@ -15,7 +15,7 @@ import java.util.Date
 
 class DevolutionsViewModel: ViewModel() {
 
-    private val _student = MutableStateFlow(Student("", "", emptyList(), ""))
+    private val _student = MutableStateFlow(Student("", "", ArrayList(), ""))
     val student: StateFlow<Student> = _student
 
     private val _devolutionsList = MutableStateFlow(List(0){PendingElement(0, Element("", 0), Date())})
