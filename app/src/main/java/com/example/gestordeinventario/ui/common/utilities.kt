@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +20,11 @@ import androidx.compose.ui.unit.sp
 import java.text.DateFormat.MEDIUM
 import java.text.DateFormat.getDateInstance
 import java.util.Date
+
+data class CheckboxInfo(
+    val isChecked: Boolean,
+    val itemIndex: Int
+)
 
 @Composable
 fun LogoutButton(modifier: Modifier, logout: () -> Unit){
@@ -100,6 +107,18 @@ fun RowScope.TableQuantityCell(
                 .align(Alignment.CenterVertically)
                 .padding(4.dp),
             color = Color(0xFF4EA8E9)
+        )
+    }
+}
+
+@Composable
+fun RowScope.CheckboxCell(checkboxItems: SnapshotStateList<CheckboxInfo>, itemIndex: Int, weight: Float, modifier: Modifier) {
+    Row(modifier = modifier.border(1.dp, Color.White).weight(weight).size(62.dp),
+        horizontalArrangement = Arrangement.Center) {
+        Checkbox(
+            checked = checkboxItems[itemIndex].isChecked,
+            onCheckedChange = {isCheckedNew -> checkboxItems[itemIndex] = checkboxItems[itemIndex].copy(isChecked = isCheckedNew)},
+            modifier = modifier
         )
     }
 }

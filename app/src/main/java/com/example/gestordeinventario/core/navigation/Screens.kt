@@ -28,13 +28,13 @@ data class Lendings(val studentName: String)
 data class Pendings(val studentName: String)
 
 class ScreensNavigation(val navController: NavController) {
-    fun navigateToLogin() = navController.navigate(Login)
-    fun navigateToHome(padron: String, isProfessor: Boolean) = navController.navigate(Home(padron, isProfessor))
-    fun navigateToRegistration() = navController.navigate(Registration)
-    fun navigateToStudentsList() = navController.navigate(StudentsList)
-    fun navigateToElements() = navController.navigate(Elements)
-    fun navigateToDevolutions() = navController.navigate(Devolutions)
-    fun navigateToLendings(studentName: String) = navController.navigate(Lendings(studentName))
-    fun navigateToPendings(studentName: String) = navController.navigate(Pendings(studentName))
+    fun navigateToLogin() = navController.navigate(Login){launchSingleTop = true}
+    fun navigateToHome(padron: String, isProfessor: Boolean) = navController.navigate(Home(padron, isProfessor)){launchSingleTop = true}
+    fun navigateToRegistration() = navController.navigate(Registration){launchSingleTop = true}
+    fun navigateToStudentsList() = navController.navigate(StudentsList){launchSingleTop = true}
+    fun navigateToElements() = navController.navigate(Elements){launchSingleTop = true}
+    fun navigateToDevolutions() = navController.navigate(Devolutions){launchSingleTop = true}
+    fun navigateToLendings(studentName: String) = navController.navigate(Lendings(studentName)){launchSingleTop = true}
+    fun navigateToPendings(studentName: String) = navController.navigate(Pendings(studentName)){launchSingleTop = true}
     fun restart() = navController.navigate(Login) { popUpTo(Login) { inclusive = true } }
 }
