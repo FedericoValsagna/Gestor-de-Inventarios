@@ -1,9 +1,7 @@
 package com.example.gestordeinventario.repository
 
-import android.util.Log
 import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.repository.dataclasses.ElementDataClass
-import com.example.gestordeinventario.repository.dataclasses.StudentDataClass
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
@@ -18,6 +16,12 @@ class ElementRepository: Repository<ElementDataClass>() {
     suspend fun get(reference: DocumentReference) : Element? {
         val obj = Firebase.firestore.document(reference.path).get().await()
         return instance(obj.toObject<ElementDataClass>(), obj.reference)
+    }
+    suspend fun save(element: Element) {
+        val dataClass = ElementDataClass(element.name, element.totalQuantity)
+        Firebase.firestore.collection(documentPath).document(element.name).set(dataClass).await()
+        val reference = this.getReference(documentPath, element.name)
+        element.reference = reference
     }
     private fun instance(dataClass: ElementDataClass?, reference: DocumentReference): Element? {
         dataClass ?: return null

@@ -147,9 +147,10 @@ class LendingsViewModel(padron: String): ViewModel() {
     fun submitPendingElements() {
         viewModelScope.launch{
             pendingElements.value.forEach{ pendingElement ->
-                if (pendingElement.quantity != 0) {
-                    PendingElementRepository().save(pendingElement, student.value)
-                }
+                if (pendingElement.quantity == 0) return@forEach
+                if (!pendingElement.element.request(pendingElement.quantity)) return@forEach
+                PendingElementRepository().save(pendingElement, student.value)
+                ElementRepository().save(pendingElement.element)
             }
         }
     }

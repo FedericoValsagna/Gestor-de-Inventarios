@@ -24,8 +24,6 @@ class PendingElementRepository: Repository<PendingElementDataClass>() {
             this.get(ref)
         }
         return x?.let { ArrayList(it) }
-//        return documentReference?.mapNotNull { this.get(it) }?.takeIf { it.isNotEmpty() }
-//            ?.let { ArrayList(it) }
     }
     suspend fun save(pendingElement: PendingElement, student: Student) {
         val ref = this.referenceFrom(pendingElement, student)
