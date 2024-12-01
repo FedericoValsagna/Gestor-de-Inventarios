@@ -21,4 +21,7 @@ abstract class Repository<RepositoryDataClass: Any> {
             emptyList()
         }
     }
+    suspend fun getReference(collection: String, path: String): DocumentReference {
+        return Firebase.firestore.collection(collection).document(path).get().await().reference
+    }
 }

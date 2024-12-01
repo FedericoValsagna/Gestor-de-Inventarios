@@ -1,7 +1,5 @@
 package com.example.gestordeinventario.repository
 
-import android.util.Log
-import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.dataclasses.PendingElementDataClass
@@ -22,32 +20,34 @@ class PendingElementRepository: Repository<PendingElementDataClass>() {
         return instance(obj.toObject<PendingElementDataClass>(), obj.reference)
     }
     suspend fun getSome(documentReference: List<DocumentReference>?): ArrayList<PendingElement>? {
-        Log.d("REPOTAG", "REFS: $documentReference")
         val x = documentReference?.mapNotNull{ ref ->
             this.get(ref)
         }
-        Log.d("REPOTAG", "RESULT FROM REFS: $x")
         return x?.let { ArrayList(it) }
 //        return documentReference?.mapNotNull { this.get(it) }?.takeIf { it.isNotEmpty() }
 //            ?.let { ArrayList(it) }
     }
     suspend fun save(pendingElement: PendingElement, student: Student) {
-        val ref = "${student.name}_${pendingElement.element.name}_${pendingElement.devolutionDate}"
-        val dataClass = PendingElementDataClass(pendingElement.quantity, null, pendingElement.devolutionDate)
+        val ref = this.referenceFrom(pendingElement, student)
+        val dataClass = PendingElementDataClass(pendingElement.quantity, pendingElement.element.reference, pendingElement.devolutionDate)
+
         Firebase.firestore.collection("pendingElement").document(ref).set(dataClass).await()
-        val reference = Firebase.firestore.collection("pendingElement").document(ref).get().await().reference
+
+        val reference = this.getReference(documentPath, ref)
         pendingElement.reference = reference
         student.addPendingElement(pendingElement)
         StudentRepository().save(student)
     }
     private suspend fun instance(dataClass: PendingElementDataClass?, reference: DocumentReference): PendingElement? {
-        Log.d("REPOTAG", "Dataclass: $dataClass |||     Reference: $reference")
         dataClass ?: return null
-        // dataClass.element ?: return null
+        dataClass.element ?: return null
         dataClass.quantity ?: return null
         dataClass.devolutionDate ?: return null
-        // val element = ElementRepository().get(dataClass.element) ?: return null
+        val element = ElementRepository().get(dataClass.element) ?: return null
 
-        return PendingElement(dataClass.quantity, Element("Cable", 3), dataClass.devolutionDate, reference)
+        return PendingElement(dataClass.quantity, element, dataClass.devolutionDate, reference)
+    }
+    private fun referenceFrom(pendingElement: PendingElement, student: Student): String{
+        return "${student.name}_${pendingElement.element.name}_${pendingElement.devolutionDate}"
     }
 }
