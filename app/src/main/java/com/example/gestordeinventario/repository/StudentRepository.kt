@@ -35,6 +35,7 @@ class StudentRepository: Repository<StudentDataClass>() {
         dataClass.padron ?: return null
         dataClass.authId ?: return null
         val pendingDevolutions = PendingElementRepository().getSome(dataClass.pendingDevolutions) ?: ArrayList()
+        Log.d("REPOTAG", "DEVOLUTIONS: $pendingDevolutions")
         return Student(dataClass.name, dataClass.padron, pendingDevolutions, dataClass.authId)
     }
 }

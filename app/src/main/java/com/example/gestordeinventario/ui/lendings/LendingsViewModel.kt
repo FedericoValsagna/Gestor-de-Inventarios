@@ -18,7 +18,7 @@ import java.util.Date
 
 class LendingsViewModel(padron: String): ViewModel() {
     private val _student = MutableStateFlow(Student("", "", ArrayList(), ""))
-    val student: StateFlow<Student> = _student
+    val student: MutableStateFlow<Student> = _student
 
     private val _elementsList = MutableStateFlow(List(0) { Element("", 0) })
 

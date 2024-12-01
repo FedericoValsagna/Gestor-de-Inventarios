@@ -1,9 +1,6 @@
 package com.example.gestordeinventario.repository
 
 import android.util.Log
-import com.example.gestordeinventario.model.PendingElement
-import com.example.gestordeinventario.repository.dataclasses.PendingElementDataClass
-import com.example.gestordeinventario.repository.dataclasses.RepositoryDataClass
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
