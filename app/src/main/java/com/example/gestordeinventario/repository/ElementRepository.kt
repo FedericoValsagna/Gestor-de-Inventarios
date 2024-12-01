@@ -17,7 +17,6 @@ class ElementRepository: Repository<ElementDataClass>() {
     }
     suspend fun get(reference: DocumentReference) : Element? {
         val obj = Firebase.firestore.document(reference.path).get().await()
-        Log.d("REPOTAG", "DATACLASS: ${obj.toObject<ElementDataClass>()} ||| REF: ${obj.reference}")
         return instance(obj.toObject<ElementDataClass>(), obj.reference)
     }
     private fun instance(dataClass: ElementDataClass?, reference: DocumentReference): Element? {
