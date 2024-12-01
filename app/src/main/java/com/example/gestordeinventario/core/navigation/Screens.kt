@@ -24,6 +24,9 @@ data class Lendings(val studentName: String)
 @Serializable
 data class Pendings(val studentName: String)
 
+@Serializable
+object Providers
+
 class ScreensNavigation(val navController: NavController) {
     fun navigateToLogin() = navController.navigate(Login)
     fun navigateToHome(padron: String, isProfessor: Boolean) = navController.navigate(Home(padron, isProfessor))
@@ -33,4 +36,5 @@ class ScreensNavigation(val navController: NavController) {
     fun navigateToLendings(studentName: String) = navController.navigate(Lendings(studentName))
     fun navigateToPendings(studentName: String) = navController.navigate(Pendings(studentName))
     fun restart() = navController.navigate(Login) { popUpTo(Login) { inclusive = true } }
+    fun navigateToProvidersList() = navController.navigate(Providers)
 }
