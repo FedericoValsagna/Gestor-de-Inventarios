@@ -17,7 +17,7 @@ class StudentRepository: Repository<StudentDataClass>() {
         return ArrayList(this.internalGetAll<StudentDataClass>().mapNotNull { (item, _) -> instance(item) })
     }
     suspend fun getById(id: String): Student? {
-        return instance(Firebase.firestore.document("users/$id").get().await().toObject<StudentDataClass>())
+        return instance(Firebase.firestore.document("$documentPath/$id").get().await().toObject<StudentDataClass>())
     }
 
     suspend fun getByAuthId(authId: String): Student? {

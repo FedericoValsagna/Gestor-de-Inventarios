@@ -1,4 +1,4 @@
-package com.example.gestordeinventario.ui.providers
+package com.example.gestordeinventario.ui.replenish
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,8 +14,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,26 +23,32 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
+import com.example.gestordeinventario.model.Element
+import com.example.gestordeinventario.model.PendingElement
+import com.example.gestordeinventario.model.Provider
+import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.common.TableCell
-import com.example.gestordeinventario.ui.common.TableClickableCell
-import com.example.gestordeinventario.model.Provider
+import com.example.gestordeinventario.ui.pendings.PendingsViewModel
+import java.util.ArrayList
+
 
 @Composable
-fun ProvidersListScreen(viewModel: ProvidersViewModel, screensNavigation: ScreensNavigation){
-    val providersList : List<Provider> by viewModel.providersList.collectAsState()
+fun ReplenishScreen(viewModel: ReplenishViewModel, screensNavigation: ScreensNavigation){
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+    val provider: Provider by viewModel.provider.observeAsState(initial= Provider("", ArrayList()))
 
     Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp) ) {
-        ProviderListHeader(Modifier.align(Alignment.CenterHorizontally))
+        ReplenishHeader(Modifier.align(Alignment.CenterHorizontally), provider.name)
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.8f)){
-            ProviderList(providers = providersList, modifier = Modifier, screensNavigation = screensNavigation)
+            Elements(provider.elements, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -51,36 +57,31 @@ fun ProvidersListScreen(viewModel: ProvidersViewModel, screensNavigation: Screen
 }
 
 @Composable
-fun ProviderListHeader(modifier: Modifier) {
+fun ReplenishHeader(modifier: Modifier, providerName: String) {
     Text(
-        text = "Listado de Provedores",
+        text = "Elementos $providerName",
         fontSize = 24.sp,
         modifier = modifier.padding(vertical = 16.dp)
     )
 }
 
 @Composable
-fun ProviderList(providers: List<Provider>, modifier: Modifier, screensNavigation: ScreensNavigation) {
-    LazyColumn(
+fun Elements(elements: List<Element>, modifier: Modifier) {
+    LazyColumn (
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         item {
             Row(Modifier.background(Color.Gray)) {
-                TableCell(text = "Provedor", weight = 1f, modifier = modifier)
-                TableCell(text = "Catalogo", weight = 1f, modifier = modifier)
+                TableCell(text = "Elemento", weight = 1f, modifier = modifier)
+                TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
             }
         }
-        items(providers) { provider ->
-            Row(modifier = modifier.fillMaxWidth()) {
-                TableCell(text = provider.name, weight = 1f, modifier = modifier)
-                TableClickableCell(
-                    text = "Catalogo",
-                    weight = 1f,
-                    modifier = modifier,
-                    navigateToScreen = {screensNavigation.navigateToReplenish(provider.name)}
-                )
+        items(elements) {element ->
+            Row (modifier = modifier.fillMaxWidth()) {
+                TableCell(text = element.name, weight = 1f, modifier = modifier)
+                TableCell(text = element.totalQuantity.toString(), weight = 1f, modifier = modifier)
             }
         }
     }

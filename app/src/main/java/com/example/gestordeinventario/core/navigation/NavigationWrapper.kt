@@ -1,6 +1,7 @@
 package com.example.gestordeinventario.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,6 +20,8 @@ import com.example.gestordeinventario.ui.elements.ElementsListScreen
 import com.example.gestordeinventario.ui.elements.ElementsViewModel
 import com.example.gestordeinventario.ui.providers.ProvidersListScreen
 import com.example.gestordeinventario.ui.providers.ProvidersViewModel
+import com.example.gestordeinventario.ui.replenish.ReplenishScreen
+import com.example.gestordeinventario.ui.replenish.ReplenishViewModel
 import com.example.gestordeinventario.ui.students_list.StudentsListScreen
 import com.example.gestordeinventario.ui.students_list.StudentsListViewModel
 
@@ -62,6 +65,10 @@ fun NavigationWrapper() {
         }
         composable<Providers> {
             ProvidersListScreen(viewModel = ProvidersViewModel(), screensNavigation)
+        }
+        composable<Replenish> {
+            val replenish: Replenish = it.toRoute()
+            ReplenishScreen(viewModel = ReplenishViewModel(replenish.providerName), screensNavigation)
         }
     }
 }
