@@ -10,14 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.ui.common.LogoutButton
@@ -39,8 +45,7 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val student: Student by viewModel.student.collectAsState()
-    val checkboxList: SnapshotStateList<CheckboxInfo> by viewModel.pendingsCheckboxes.collectAsState()
-
+    val checkboxHashmap: HashMap<String, Pair<PendingElement, Boolean>> by viewModel.checkboxHashMap.collectAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -49,7 +54,7 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.7f)){
-            Pendings(student.getOngoingPendingElements(), checkboxList = checkboxList, modifier = Modifier)
+            Pendings(viewModel, student.getOngoingPendingElements(), modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -71,8 +76,8 @@ fun PendingsHeader(modifier: Modifier, studentName: String) {
 
 @Composable
 fun Pendings(
+    viewModel: PendingsViewModel,
     pendingDevolutions: List<PendingElement>,
-    checkboxList: SnapshotStateList<CheckboxInfo>,
     modifier: Modifier
 ) {
     LazyColumn (
@@ -85,15 +90,16 @@ fun Pendings(
                 TableCell(text = "Elemento", weight = 1f, modifier = modifier)
                 TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
                 TableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
-                TableCell(text = "Entregado", weight = 1f, modifier = modifier)
+                TableCell(text = "Entregado", weight = 0.8f, modifier = modifier)
             }
         }
-        itemsIndexed(pendingDevolutions) {index, pendingElement ->
+        items(pendingDevolutions) { pendingElement ->
+            var checkedState: Boolean by remember { mutableStateOf(false) }
             Row (modifier = modifier.fillMaxWidth()) {
                 TableCell(text = pendingElement.element.name, weight = 1f, modifier = modifier)
                 TableCell(text = pendingElement.quantity.toString(), weight = 1f, modifier = modifier)
                 TableCell(text = getFormatDate(pendingElement.devolutionDate), weight = 1f, modifier = modifier)
-                CheckboxCell(checkboxItems = checkboxList, itemIndex = index, weight = 1f, modifier = modifier)
+                Checkbox(onCheckedChange = { viewModel.updateCheckbox(pendingElement.reference.toString(), it); checkedState = it}, checked = checkedState, modifier = modifier.weight(0.8f))
             }
         }
     }
