@@ -17,6 +17,9 @@ class ElementRepository: Repository<ElementDataClass>() {
         val obj = Firebase.firestore.document(reference.path).get().await()
         return instance(obj.toObject<ElementDataClass>(), obj.reference)
     }
+    suspend fun getSome(documentReference: List<DocumentReference>?): ArrayList<Element>? {
+        return documentReference?.mapNotNull{ this.get(it) }?.let { ArrayList(it) }
+    }
     suspend fun save(element: Element) {
         val dataClass = ElementDataClass(element.name, element.totalQuantity)
         Firebase.firestore.collection(documentPath).document(element.name).set(dataClass).await()

@@ -1,10 +1,12 @@
 package com.example.gestordeinventario.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.gestordeinventario.model.Provider
 import com.example.gestordeinventario.ui.devolutions.DevolutionsScreen
 import com.example.gestordeinventario.ui.devolutions.DevolutionsViewModel
 import com.example.gestordeinventario.ui.home.HomeScreen
@@ -18,6 +20,10 @@ import com.example.gestordeinventario.ui.lendings.LendingsViewModel
 import com.example.gestordeinventario.ui.pendings.PendingsViewModel
 import com.example.gestordeinventario.ui.elements.ElementsListScreen
 import com.example.gestordeinventario.ui.elements.ElementsViewModel
+import com.example.gestordeinventario.ui.providers.ProvidersListScreen
+import com.example.gestordeinventario.ui.providers.ProvidersViewModel
+import com.example.gestordeinventario.ui.replenish.ReplenishScreen
+import com.example.gestordeinventario.ui.replenish.ReplenishViewModel
 import com.example.gestordeinventario.ui.students_list.StudentsListScreen
 import com.example.gestordeinventario.ui.students_list.StudentsListViewModel
 
@@ -62,6 +68,13 @@ fun NavigationWrapper() {
             val pendings : Pendings = it.toRoute()
 
             PendingsScreen(viewModel = PendingsViewModel(pendings.studentName), screensNavigation)
+        }
+        composable<Providers> {
+            ProvidersListScreen(viewModel = ProvidersViewModel(), screensNavigation)
+        }
+        composable<Replenish> {
+            val replenish: Replenish = it.toRoute()
+            ReplenishScreen(viewModel = ReplenishViewModel(replenish.providerName), screensNavigation)
         }
     }
 }

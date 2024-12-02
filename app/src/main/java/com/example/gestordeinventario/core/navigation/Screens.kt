@@ -27,6 +27,12 @@ data class Lendings(val studentName: String)
 @Serializable
 data class Pendings(val studentName: String)
 
+@Serializable
+object Providers
+
+@Serializable
+data class Replenish(val providerName: String)
+
 class ScreensNavigation(val navController: NavController) {
     fun navigateToLogin() = navController.navigate(Login){launchSingleTop = true}
     fun navigateToHome(padron: String, isProfessor: Boolean) = navController.navigate(Home(padron, isProfessor)){launchSingleTop = true}
@@ -37,4 +43,6 @@ class ScreensNavigation(val navController: NavController) {
     fun navigateToLendings(studentName: String) = navController.navigate(Lendings(studentName)){launchSingleTop = true}
     fun navigateToPendings(studentName: String) = navController.navigate(Pendings(studentName)){launchSingleTop = true}
     fun restart() = navController.navigate(Login) { popUpTo(Login) { inclusive = true } }
+    fun navigateToProvidersList() = navController.navigate(Providers)
+    fun navigateToReplenish(providerName: String) = navController.navigate(Replenish(providerName))
 }
