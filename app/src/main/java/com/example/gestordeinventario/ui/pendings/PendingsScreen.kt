@@ -49,7 +49,7 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.7f)){
-            Pendings(student.pendingDevolutions, checkboxList = checkboxList, modifier = Modifier)
+            Pendings(student.getOngoingPendingElements(), checkboxList = checkboxList, modifier = Modifier)
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -106,7 +106,7 @@ fun PendingAcceptButton(
     resetPendingsScreen: () -> Unit
 ) {
     Button(
-        onClick = { /* TODO Sacar elementos pendientes seleccionados */ resetPendingsScreen()},
+        onClick = { viewModel.sumbitDevolutions(); resetPendingsScreen()},
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp),
