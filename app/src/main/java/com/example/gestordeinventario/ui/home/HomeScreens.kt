@@ -44,7 +44,7 @@ fun HomeAdmins(modifier: Modifier, screensNavigation: ScreensNavigation) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HomeHeader(modifier = modifier)
+        HomeHeader(text= "Inicio Encargados", modifier = modifier)
         Spacer(modifier = modifier.height(16.dp))
         HomeAdminsButtons(modifier = modifier, screensNavigation = screensNavigation)
         Spacer(modifier = modifier.height(16.dp))
@@ -60,7 +60,7 @@ fun HomeStudents(padron: String, modifier: Modifier, screensNavigation: ScreensN
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HomeHeader(modifier = modifier)
+        HomeHeader(text= "Inicio Estudiantes", modifier = modifier)
         Spacer(modifier = modifier.height(16.dp))
         HomeStudentsButtons(padron, modifier = modifier, screensNavigation = screensNavigation)
         LogoutButton(modifier = modifier){screensNavigation.restart()}
@@ -100,9 +100,9 @@ fun HomeStudentsButtons(padron: String, modifier: Modifier, screensNavigation: S
 }
 
 @Composable
-fun HomeHeader(modifier: Modifier) {
+fun HomeHeader(text: String, modifier: Modifier) {
     Text(
-        text = "INICIO ENCARGADOS",
+        text = text,
         fontSize = 28.sp,
         modifier = modifier.padding(vertical = 16.dp)
     )
