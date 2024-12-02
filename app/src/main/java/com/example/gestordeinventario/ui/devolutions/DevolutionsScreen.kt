@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.PendingElement
+import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.common.TableCell
 import com.example.gestordeinventario.ui.common.getFormatDate
@@ -67,8 +68,8 @@ fun DevolutionsList(
     viewModel: DevolutionsViewModel,
     modifier: Modifier
 ) {
-    val devolutions: List<PendingElement> by viewModel.devolutionsList.collectAsState()
-
+    //val devolutions: List<PendingElement> by viewModel.devolutionsList.collectAsState()
+    val students: List<Student> by viewModel.students.collectAsState()
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -78,25 +79,33 @@ fun DevolutionsList(
             Row(Modifier.background(Color.Gray)) {
                 TableCell(text = "Elemento", weight = 1f, modifier = modifier)
                 TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
+                TableCell(text= "Estudiante", weight = 1f, modifier =modifier)
                 TableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
             }
         }
-        items(devolutions) { pendingElement ->
-            Row(modifier = modifier.fillMaxWidth()) {
-                TableCell(
-                    text = pendingElement.element.name,
-                    weight = 1f,
-                    modifier = modifier)
-                TableCell(
-                    text = pendingElement.quantity.toString(),
-                    weight = 1f,
-                    modifier = modifier
-                )
-                TableCell(
-                    text = getFormatDate(pendingElement.devolutionDate),
-                    weight = 1f,
-                    modifier = modifier
-                )
+        students.forEach{ student ->
+            items(student.getOngoingPendingElements()) { pendingElement ->
+                Row(modifier = modifier.fillMaxWidth()) {
+                    TableCell(
+                        text = pendingElement.element.name,
+                        weight = 1f,
+                        modifier = modifier)
+                    TableCell(
+                        text = pendingElement.quantity.toString(),
+                        weight = 1f,
+                        modifier = modifier
+                    )
+                    TableCell(
+                        text = student.name,
+                        weight = 1f,
+                        modifier = modifier
+                    )
+                    TableCell(
+                        text = getFormatDate(pendingElement.devolutionDate),
+                        weight = 1f,
+                        modifier = modifier
+                    )
+                }
             }
         }
     }
