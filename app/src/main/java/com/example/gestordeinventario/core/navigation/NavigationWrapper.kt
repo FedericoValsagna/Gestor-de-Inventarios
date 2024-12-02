@@ -24,6 +24,8 @@ import com.example.gestordeinventario.ui.providers.ProvidersListScreen
 import com.example.gestordeinventario.ui.providers.ProvidersViewModel
 import com.example.gestordeinventario.ui.replenish.ReplenishScreen
 import com.example.gestordeinventario.ui.replenish.ReplenishViewModel
+import com.example.gestordeinventario.ui.student_pendings.StudentPendingsScreen
+import com.example.gestordeinventario.ui.student_pendings.StudentPendingsViewModel
 import com.example.gestordeinventario.ui.students_list.StudentsListScreen
 import com.example.gestordeinventario.ui.students_list.StudentsListViewModel
 
@@ -75,6 +77,10 @@ fun NavigationWrapper() {
         composable<Replenish> {
             val replenish: Replenish = it.toRoute()
             ReplenishScreen(viewModel = ReplenishViewModel(replenish.providerName), screensNavigation)
+        }
+        composable<StudentPendings> {
+            val studentPendings: StudentPendings = it.toRoute()
+            StudentPendingsScreen(viewModel = StudentPendingsViewModel(studentPendings.padron), screensNavigation)
         }
     }
 }

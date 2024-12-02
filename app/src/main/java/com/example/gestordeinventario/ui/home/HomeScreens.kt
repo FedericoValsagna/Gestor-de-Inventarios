@@ -31,7 +31,7 @@ fun HomeScreen(padron: String, isProfessor: Boolean, screensNavigation: ScreensN
             HomeAdmins(modifier = Modifier.align(Alignment.Center), screensNavigation = screensNavigation)
         }
         else {
-            HomeStudents(modifier = Modifier.align(Alignment.Center), screensNavigation = screensNavigation)
+            HomeStudents(padron, modifier = Modifier.align(Alignment.Center), screensNavigation = screensNavigation)
         }
     }
 }
@@ -53,7 +53,7 @@ fun HomeAdmins(modifier: Modifier, screensNavigation: ScreensNavigation) {
 }
 
 @Composable
-fun HomeStudents(modifier: Modifier, screensNavigation: ScreensNavigation) {
+fun HomeStudents(padron: String, modifier: Modifier, screensNavigation: ScreensNavigation) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -62,7 +62,7 @@ fun HomeStudents(modifier: Modifier, screensNavigation: ScreensNavigation) {
     ) {
         HomeHeader(modifier = modifier)
         Spacer(modifier = modifier.height(16.dp))
-        HomeStudentsButtons(modifier = modifier, screensNavigation = screensNavigation)
+        HomeStudentsButtons(padron, modifier = modifier, screensNavigation = screensNavigation)
         LogoutButton(modifier = modifier){screensNavigation.restart()}
     }
 }
@@ -88,13 +88,13 @@ fun HomeAdminsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) 
 }
 
 @Composable
-fun HomeStudentsButtons(modifier: Modifier, screensNavigation: ScreensNavigation) {
+fun HomeStudentsButtons(padron: String, modifier: Modifier, screensNavigation: ScreensNavigation) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         HomeButton(text = "Elementos"){screensNavigation.navigateToElements()}
-        HomeButton(text = "Pendientes"){screensNavigation.navigateToPendings("")}
+        HomeButton(text = "Pendientes"){screensNavigation.navigateToStudentPendings(padron)}
     }
     Spacer(modifier = modifier.height(16.dp))
 }
