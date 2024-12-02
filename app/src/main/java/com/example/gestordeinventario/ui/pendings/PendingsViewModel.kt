@@ -50,10 +50,10 @@ class PendingsViewModel(padron: String): ViewModel() {
             map.forEach { _, (pendingElement, isChecked) ->
                 if (isChecked) {
                     viewModelScope.launch {
-                        pendingElement.resolve()
-                        PendingElementRepository().save(pendingElement, _student.value)
-                        ElementRepository().save(pendingElement.element)
+                        student.value.returnElement(pendingElement)
                         StudentRepository().save(student.value)
+                        ElementRepository().save(pendingElement.element)
+                        PendingElementRepository().remove(pendingElement, _student.value)
                     }
                 }
             }

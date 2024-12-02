@@ -25,6 +25,10 @@ class PendingElementRepository: Repository<PendingElementDataClass>() {
         }
         return x?.let { ArrayList(it) }
     }
+    fun remove(pendingElement: PendingElement, student: Student) {
+        val ref = this.referenceFrom(pendingElement, student)
+        Firebase.firestore.collection(documentPath).document(ref).delete()
+    }
     suspend fun save(pendingElement: PendingElement, student: Student) {
         val ref = this.referenceFrom(pendingElement, student)
         val dataClass = PendingElementDataClass(pendingElement.quantity, pendingElement.element.reference, pendingElement.devolutionDate, pendingElement.isSolved())
