@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.gestordeinventario.model.Provider
+import com.example.gestordeinventario.ui.devolutions.DevolutionsScreen
+import com.example.gestordeinventario.ui.devolutions.DevolutionsViewModel
 import com.example.gestordeinventario.ui.home.HomeScreen
 import com.example.gestordeinventario.ui.lendings.LendingsScreen
 import com.example.gestordeinventario.ui.login.LoginScreen
@@ -50,6 +52,10 @@ fun NavigationWrapper() {
 
         composable<Elements>{
             ElementsListScreen(viewModel = ElementsViewModel(), screensNavigation)
+        }
+
+        composable<Devolutions>{
+            DevolutionsScreen(viewModel = DevolutionsViewModel(), screensNavigation)
         }
 
         composable<Lendings> {

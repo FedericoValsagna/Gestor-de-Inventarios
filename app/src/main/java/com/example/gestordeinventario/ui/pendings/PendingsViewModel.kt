@@ -1,29 +1,42 @@
 package com.example.gestordeinventario.ui.pendings
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.StudentRepository
+import com.example.gestordeinventario.ui.common.CheckboxInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PendingsViewModel(padron: String): ViewModel() {
-    private val _studentsList = MutableLiveData< List<Student> >()
-    private val _student: MutableLiveData<Student> = MutableLiveData<Student>()
-    val student: LiveData<Student> = _student
+    private val _student = MutableStateFlow(Student("", "", ArrayList(), ""))
+    val student: StateFlow<Student> = _student
+
+    private val _pendingsCheckboxes = MutableStateFlow(SnapshotStateList<CheckboxInfo>())
+    val pendingsCheckboxes: StateFlow<SnapshotStateList<CheckboxInfo>> = _pendingsCheckboxes
+
     init{
-        getUser(padron)
+        viewModelScope.launch {
+            getUser(padron)
+            updatePendingCheckboxes()
+        }
     }
-    private fun getUser(padron: String){
-        viewModelScope.launch{
+    private suspend fun getUser(padron: String){
             val result: Student = withContext(Dispatchers.IO) {
                 StudentRepository().getById(padron) ?: Student("Error", "", ArrayList(), "")
             }
             _student.value = result
-        }
     }
-
+    private fun updatePendingCheckboxes() {
+        val pendingList = SnapshotStateList<CheckboxInfo>()
+        _student.value.pendingDevolutions.forEachIndexed {index, _ ->
+            pendingList.add(CheckboxInfo(false, index))
+        }
+        println("Debug trace: ${_student.value.pendingDevolutions.size}")
+        _pendingsCheckboxes.value = pendingList
+    }
 }

@@ -11,10 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -31,10 +36,15 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.R
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
+import com.example.gestordeinventario.ui.common.EmailField
+import com.example.gestordeinventario.ui.common.PasswordField
+import com.example.gestordeinventario.ui.common.RepeatPasswordField
 import kotlinx.coroutines.launch
 
 
@@ -70,7 +80,7 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
     }
     else{
         Column(modifier = modifier) {
-            HeaderText(Modifier.align(Alignment.CenterHorizontally))
+            RegistrationHeaderText(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
             // HeaderImage(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
@@ -78,13 +88,13 @@ fun Registration(modifier: Modifier, viewModel: RegistrationViewModel, screensNa
             Spacer(modifier = Modifier.padding(4.dp))
             PasswordField(password) { viewModel.onRegistrationChanged(email, it, name, padron, isAdmin) }
             Spacer(modifier = Modifier.padding(4.dp))
-            passwordRepeat = repeatPasswordField()
+            passwordRepeat = RepeatPasswordField()
             Spacer(modifier = Modifier.padding(4.dp))
-            NameField(name) { viewModel.onRegistrationChanged(email, password, it, padron, isAdmin)}
+            RegistrationNameField(name) { viewModel.onRegistrationChanged(email, password, it, padron, isAdmin)}
             Spacer(modifier = Modifier.padding(4.dp))
-            PadronField(padron) { viewModel.onRegistrationChanged(email, password, name, it, isAdmin) }
+            RegistrationPadronField(padron) { viewModel.onRegistrationChanged(email, password, name, it, isAdmin) }
             Spacer(modifier = Modifier.padding(4.dp))
-            AdminField(isAdmin) { viewModel.onRegistrationChanged(email, password, name, padron, it)}
+            RegistrationAdminField(isAdmin) { viewModel.onRegistrationChanged(email, password, name, padron, it)}
             Spacer(modifier = Modifier.padding(16.dp))
             RegistrationButton(Modifier.align(Alignment.CenterHorizontally), registrationEnable) {
                 couroutineScope.launch { viewModel.onRegistrationSelected()
@@ -117,7 +127,7 @@ fun RegistrationButton(modifier: Modifier, registrationEnable: Boolean, onRegist
 }
 
 @Composable
-fun HeaderText(modifier: Modifier) {
+fun RegistrationHeaderText(modifier: Modifier) {
     Text(
         text = "Gestor de Inventario",
         fontSize = 32.sp,
@@ -141,67 +151,7 @@ fun HeaderText(modifier: Modifier) {
 }
 
 @Composable
-fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
-    TextField(
-        value = password,
-        onValueChange = {onTextFieldChanged(it)},
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Ingresar contraseña") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        singleLine = true,
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color(0xFF484747),
-            focusedContainerColor = Color(0xFFDCDCDC),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        )
-    )
-}
-
-@Composable
-fun repeatPasswordField(): String {
-    var password by remember { mutableStateOf("")}
-
-    TextField(
-        value = password,
-        onValueChange = {password = it},
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Repetir contraseña") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        singleLine = true,
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color(0xFF484747),
-            focusedContainerColor = Color(0xFFDCDCDC),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        )
-    )
-    return password
-}
-
-@Composable
-fun EmailField(email : String, onTextFieldChanged: (String) -> Unit) {
-    TextField(
-        value = email,
-        onValueChange = { onTextFieldChanged(it) },
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Ingresar correo") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        singleLine = true,
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color(0xFF484747),
-            focusedContainerColor = Color(0xFFDCDCDC),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        )
-    )
-}
-
-@Composable
-fun NameField(username: String, onTextFieldChanged: (String) -> Unit) {
+fun RegistrationNameField(username: String, onTextFieldChanged: (String) -> Unit) {
     TextField(
         value = username,
         onValueChange = { onTextFieldChanged(it) },
@@ -220,7 +170,7 @@ fun NameField(username: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun PadronField(padron: String, onTextFieldChanged: (String) -> Unit) {
+fun RegistrationPadronField(padron: String, onTextFieldChanged: (String) -> Unit) {
     TextField(
         value = padron,
         onValueChange = { onTextFieldChanged(it) },
@@ -239,7 +189,7 @@ fun PadronField(padron: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun AdminField(isAdmin: Boolean, onCheckedChanged: (Boolean) -> Unit) {
+fun RegistrationAdminField(isAdmin: Boolean, onCheckedChanged: (Boolean) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically){
         Text(
             text = "Profesor: ",
@@ -252,7 +202,7 @@ fun AdminField(isAdmin: Boolean, onCheckedChanged: (Boolean) -> Unit) {
 }
 
 @Composable
-fun HeaderImage(modifier: Modifier) {
+fun RegistrationHeaderImage(modifier: Modifier) {
     Image(
         painter = painterResource(id = R.drawable.esc_fiuba),
         contentDescription = "HeaderEscudoFiuba",
