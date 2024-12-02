@@ -25,6 +25,9 @@ class LoginViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
+    private val _showErrorDialog = MutableLiveData<Boolean>()
+    val showErrorDialog: LiveData<Boolean> = _showErrorDialog
+
     fun onLoginChanged(email: String, password: String){
         _email.value = email
         _password.value = password
@@ -49,30 +52,40 @@ class LoginViewModel : ViewModel() {
                         if (student != null){
                             Log.i("LOGIN", "STUDENT FOUND | Student: $student")
                             screensNavigation.navigateToHome(student.padron, false)
+                            _showErrorDialog.value = false
                         } else {
                             val professor = ProfessorRepository().getByAuthId(responseId)
                             if (professor != null){
                                 Log.i("LOGIN", "PROFESSOR FOUND | Professor: $professor")
                                 screensNavigation.navigateToHome(professor.padron, true)
+                                _showErrorDialog.value = true
                             } else {
                                 Log.i("LOGIN"  ,"PROFESSOR NOT FOUND")
                                 screensNavigation.navigateToHome("106010", true)
+                                _showErrorDialog.value = true
                             }
                         }
                     }
                 }
                 LoginResponse.INVALID_EMAIL -> {
                     _isLoading.value = false
+                    _showErrorDialog.value = true
                 }
                 LoginResponse.INVALID_PASSWORD -> {
                     _isLoading.value = false
+                    _showErrorDialog.value = true
                 }
                 LoginResponse.OTHER_ERROR -> {
                     _isLoading.value = false
+                    _showErrorDialog.value = true
                 }
             }
         }
         // delay(4000)
         // _isLoading.value = false
+    }
+
+    fun dismissErrorDialog(){
+        _showErrorDialog.value = false
     }
 }

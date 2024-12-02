@@ -11,26 +11,39 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gestordeinventario.R
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
+import com.example.gestordeinventario.ui.common.EmailField
+import com.example.gestordeinventario.ui.common.PasswordField
 import kotlinx.coroutines.launch
 
 
@@ -52,6 +65,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, screensNavigation: Scre
     val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val couroutineScope = rememberCoroutineScope()
+    val showErrorDialog: Boolean by viewModel.showErrorDialog.observeAsState(initial = false)
 
     if(isLoading){
         Box(Modifier.fillMaxSize()){
@@ -60,9 +74,9 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, screensNavigation: Scre
     }
     else{
         Column(modifier = modifier) {
-            HeaderText(Modifier.align(Alignment.CenterHorizontally))
+            LoginHeaderText(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
-            HeaderImage(Modifier.align(Alignment.CenterHorizontally))
+            LoginHeaderImage(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
             EmailField(email) { viewModel.onLoginChanged(it, password) }
             Spacer(modifier = Modifier.padding(4.dp))
@@ -73,6 +87,9 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, screensNavigation: Scre
             LoginButton(Modifier.align(Alignment.CenterHorizontally), loginEnable) {
                     couroutineScope.launch { viewModel.onLoginSelected(screensNavigation) }
             }
+        }
+        if (showErrorDialog){
+            LoginErrorDialog("Email y/o contraseña inválidos"){viewModel.dismissErrorDialog()}
         }
     }
 }
@@ -97,7 +114,7 @@ fun LoginButton(modifier: Modifier, loginEnable: Boolean, onLoginSelected: () ->
 }
 
 @Composable
-fun HeaderText(modifier: Modifier) {
+fun LoginHeaderText(modifier: Modifier) {
     Text(
         text = "Gestor de Inventario",
         fontSize = 32.sp,
@@ -125,48 +142,28 @@ fun SignIn(modifier: Modifier, navigateToRegistration: () -> Unit) {
 }
 
 @Composable
-fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
-    TextField(
-        value = password,
-        onValueChange = {onTextFieldChanged(it)},
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Password") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        singleLine = true,
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color(0xFF484747),
-            focusedContainerColor = Color(0xFFDCDCDC),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        )
-    )
-}
-
-@Composable
-fun EmailField(email : String, onTextFieldChanged: (String) -> Unit) {
-    TextField(
-            value = email,
-            onValueChange = { onTextFieldChanged(it) },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = "Email") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            singleLine = true,
-            maxLines = 1,
-            colors = TextFieldDefaults.colors(
-                                focusedTextColor = Color(0xFF484747),
-                                focusedContainerColor = Color(0xFFDCDCDC),
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent
-            )
-    )
-}
-
-@Composable
-fun HeaderImage(modifier: Modifier) {
+fun LoginHeaderImage(modifier: Modifier) {
     Image(
         painter = painterResource(id = R.drawable.esc_fiuba),
         contentDescription = "HeaderEscudoFiuba",
         modifier = modifier.size(200.dp)
         )
+}
+
+@Composable
+fun LoginErrorDialog(message: String, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = {
+            Text(text = "Error")
+        },
+        text = {
+            Text(text = message)
+        },
+        confirmButton = {
+            Button(onClick = { onDismiss() }) {
+                Text("OK")
+            }
+        }
+    )
 }

@@ -73,6 +73,7 @@ dependencies {
     //Añadidos
     implementation(libs.androidx.runtime.livedata)
     implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.material:material-icons-extended:1.3.1")
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
