@@ -25,18 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.gestordeinventario.core.navigation.Pendings
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.Element
-import com.example.gestordeinventario.model.PendingElement
 import com.example.gestordeinventario.model.Provider
-import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.common.TableCell
 import com.example.gestordeinventario.ui.common.TableQuantityCell
-import com.example.gestordeinventario.ui.lendings.LendingsViewModel
-import com.example.gestordeinventario.ui.lendings.PendingAcceptButton
-import com.example.gestordeinventario.ui.pendings.PendingsViewModel
 import java.util.ArrayList
 
 
