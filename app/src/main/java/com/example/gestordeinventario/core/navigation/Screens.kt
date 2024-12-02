@@ -36,6 +36,9 @@ data class Replenish(val providerName: String)
 @Serializable
 data class StudentPendings(val padron: String)
 
+@Serializable
+object StudentElements
+
 class ScreensNavigation(val navController: NavController) {
     fun navigateToLogin() = navController.navigate(Login){launchSingleTop = true}
     fun navigateToHome(padron: String, isProfessor: Boolean) = navController.navigate(Home(padron, isProfessor)){launchSingleTop = true}
@@ -49,4 +52,5 @@ class ScreensNavigation(val navController: NavController) {
     fun navigateToProvidersList() = navController.navigate(Providers)
     fun navigateToReplenish(providerName: String) = navController.navigate(Replenish(providerName))
     fun navigateToStudentPendings(padron: String) = navController.navigate(StudentPendings(padron))
+    fun navigateToStudentElements() = navController.navigate(StudentElements)
 }

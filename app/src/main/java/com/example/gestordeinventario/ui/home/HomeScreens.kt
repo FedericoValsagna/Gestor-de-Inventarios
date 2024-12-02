@@ -93,7 +93,7 @@ fun HomeStudentsButtons(padron: String, modifier: Modifier, screensNavigation: S
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HomeButton(text = "Elementos"){screensNavigation.navigateToElements()}
+        HomeButton(text = "Elementos"){screensNavigation.navigateToStudentElements()}
         HomeButton(text = "Pendientes"){screensNavigation.navigateToStudentPendings(padron)}
     }
     Spacer(modifier = modifier.height(16.dp))
