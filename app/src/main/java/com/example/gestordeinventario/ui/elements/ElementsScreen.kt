@@ -26,7 +26,6 @@ import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.Element
 import com.example.gestordeinventario.ui.common.LogoutButton
 import com.example.gestordeinventario.ui.common.TableCell
-import com.example.gestordeinventario.ui.common.TableClickableCell
 
 @Composable
 fun ElementsListScreen(viewModel: ElementsViewModel, screensNavigation: ScreensNavigation) {
@@ -79,7 +78,6 @@ fun ElementsList(
             Row(Modifier.background(Color.Gray)) {
                 TableCell(text = "Nombre", weight = 1f, modifier = modifier)
                 TableCell(text = "Stock", weight = 1f, modifier = modifier)
-                TableCell(text = "Proveedores", weight = 1f, modifier = modifier)
             }
         }
         items(elements) { element ->
@@ -92,12 +90,6 @@ fun ElementsList(
                     text = element.totalQuantity.toString(),
                     weight = 1f,
                     modifier = modifier
-                )
-                TableClickableCell(
-                    text = "Proveedores",
-                    weight = 1f,
-                    modifier = modifier,
-                    navigateToScreen = { screensNavigation.navigateToPendings(element.name) }
                 )
             }
         }

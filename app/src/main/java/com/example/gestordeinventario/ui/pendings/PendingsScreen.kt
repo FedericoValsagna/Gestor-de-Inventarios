@@ -54,7 +54,7 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
         Box(Modifier.height(screenHeight*0.7f)){
-            Pendings(viewModel, student.getOngoingPendingElements(), modifier = Modifier)
+            Pendings(viewModel, student.getOngoingPendingElements(), modifier = Modifier.fillMaxWidth())
         }
         Spacer(modifier = Modifier.padding(2.dp))
         HorizontalDivider()
@@ -90,7 +90,7 @@ fun Pendings(
                 TableCell(text = "Elemento", weight = 1f, modifier = modifier)
                 TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
                 TableCell(text = "Vencimiento", weight = 1f, modifier = modifier)
-                TableCell(text = "Entregado", weight = 0.8f, modifier = modifier)
+                TableCell(text = "Entregado", weight = 1f, modifier = modifier)
             }
         }
         items(pendingDevolutions) { pendingElement ->
@@ -99,7 +99,9 @@ fun Pendings(
                 TableCell(text = pendingElement.element.name, weight = 1f, modifier = modifier)
                 TableCell(text = pendingElement.quantity.toString(), weight = 1f, modifier = modifier)
                 TableCell(text = getFormatDate(pendingElement.devolutionDate), weight = 1f, modifier = modifier)
-                Checkbox(onCheckedChange = { viewModel.updateCheckbox(pendingElement.reference.toString(), it); checkedState = it}, checked = checkedState, modifier = modifier.weight(0.8f))
+                CheckboxCell(checkedState = checkedState, weight = 1f, modifier = modifier){
+                    viewModel.updateCheckbox(pendingElement.reference.toString(), it); checkedState = it
+                }
             }
         }
     }

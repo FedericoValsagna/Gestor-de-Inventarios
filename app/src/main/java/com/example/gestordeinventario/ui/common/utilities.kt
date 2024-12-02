@@ -128,14 +128,10 @@ fun RowScope.TableQuantityCell(
 }
 
 @Composable
-fun RowScope.CheckboxCell(checkboxItems: SnapshotStateList<CheckboxInfo>, itemIndex: Int, weight: Float, modifier: Modifier) {
+fun RowScope.CheckboxCell(checkedState: Boolean, modifier: Modifier , weight: Float, onCheckedChange: (Boolean) -> Unit) {
     Row(modifier = modifier.border(1.dp, Color.White).weight(weight).size(62.dp),
         horizontalArrangement = Arrangement.Center) {
-        Checkbox(
-            checked = checkboxItems[itemIndex].isChecked,
-            onCheckedChange = {isCheckedNew -> checkboxItems[itemIndex] = checkboxItems[itemIndex].copy(isChecked = isCheckedNew)},
-            modifier = modifier
-        )
+        Checkbox(onCheckedChange = onCheckedChange, checked = checkedState, modifier = modifier)
     }
 }
 
