@@ -77,6 +77,7 @@ fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
         item {
             Row(Modifier.background(Color.Gray)) {
                 TableCell(text = "Elemento", weight = 1f, modifier = modifier)
+                TableCell(text = "Stock", weight = 1f, modifier = modifier)
                 TableCell(text = "Cantidad", weight = 1f, modifier = modifier)
                 TableCell(text = "Tiempo", weight = 1f, modifier = modifier)
             }
@@ -85,6 +86,10 @@ fun Lendings(viewModel: LendingsViewModel, modifier: Modifier) {
             Row(modifier = modifier.fillMaxWidth()) {
                 TableCell(
                     text = pending.element.name,
+                    weight = 1f,
+                    modifier = modifier)
+                TableCell(
+                    text = pending.element.totalQuantity.toString(),
                     weight = 1f,
                     modifier = modifier)
                 TableQuantityCell(

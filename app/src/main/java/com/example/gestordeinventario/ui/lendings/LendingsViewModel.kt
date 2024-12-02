@@ -29,7 +29,6 @@ class LendingsViewModel(padron: String): ViewModel() {
 
     init {
         getUser(padron)
-        getElements()
     }
 
     private fun getUser(padron: String) {
@@ -38,6 +37,7 @@ class LendingsViewModel(padron: String): ViewModel() {
                 StudentRepository().getById(padron) ?: Student("Error", "", ArrayList(), "")
             }
             _student.value = result
+            getElements()
         }
     }
 
