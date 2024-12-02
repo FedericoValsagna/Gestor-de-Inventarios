@@ -4,4 +4,7 @@ class Student(val name: String, val padron: String, val pendingDevolutions: Arra
     fun addPendingElement(pendingElement: PendingElement) {
         pendingDevolutions.add(pendingElement)
     }
+    fun getOngoingPendingElements(): List<PendingElement>{
+        return pendingDevolutions.filter { !it.isSolved() }
+    }
 }
