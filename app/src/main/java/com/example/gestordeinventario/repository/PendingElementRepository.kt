@@ -27,25 +27,24 @@ class PendingElementRepository: Repository<PendingElementDataClass>() {
     }
     suspend fun save(pendingElement: PendingElement, student: Student) {
         val ref = this.referenceFrom(pendingElement, student)
-        val dataClass = PendingElementDataClass(pendingElement.quantity, pendingElement.element.reference, pendingElement.devolutionDate)
+        val dataClass = PendingElementDataClass(pendingElement.quantity, pendingElement.element.reference, pendingElement.devolutionDate, pendingElement.isSolved())
 
         Firebase.firestore.collection("pendingElement").document(ref).set(dataClass).await()
 
         val reference = this.getReference(documentPath, ref)
         pendingElement.reference = reference
-        student.addPendingElement(pendingElement)
-        StudentRepository().save(student)
     }
     private suspend fun instance(dataClass: PendingElementDataClass?, reference: DocumentReference): PendingElement? {
         dataClass ?: return null
         dataClass.element ?: return null
         dataClass.quantity ?: return null
         dataClass.devolutionDate ?: return null
+        dataClass.solved ?: return null
         val element = ElementRepository().get(dataClass.element) ?: return null
 
-        return PendingElement(dataClass.quantity, element, dataClass.devolutionDate, reference)
+        return PendingElement(dataClass.quantity, element, dataClass.devolutionDate, dataClass.solved, reference)
     }
-    private fun referenceFrom(pendingElement: PendingElement, student: Student): String{
+    private fun referenceFrom(pendingElement: PendingElement, student: Student): String {
         return "${student.name}_${pendingElement.element.name}_${pendingElement.devolutionDate}"
     }
 }

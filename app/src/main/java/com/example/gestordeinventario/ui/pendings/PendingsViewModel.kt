@@ -4,6 +4,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestordeinventario.model.Student
+import com.example.gestordeinventario.repository.ElementRepository
+import com.example.gestordeinventario.repository.PendingElementRepository
 import com.example.gestordeinventario.repository.StudentRepository
 import com.example.gestordeinventario.ui.common.CheckboxInfo
 import kotlinx.coroutines.Dispatchers
@@ -38,5 +40,17 @@ class PendingsViewModel(padron: String): ViewModel() {
         }
         println("Debug trace: ${_student.value.pendingDevolutions.size}")
         _pendingsCheckboxes.value = pendingList
+    }
+    fun sumbitDevolutions(){
+        viewModelScope.launch {
+            _student.value.pendingDevolutions.forEachIndexed {index, pendingElement ->
+                if(_pendingsCheckboxes.value[index].isChecked){
+                    pendingElement.resolve()
+                    PendingElementRepository().save(pendingElement, _student.value)
+                    ElementRepository().save(pendingElement.element)
+                }
+            }
+            StudentRepository().save(student.value)
+        }
     }
 }

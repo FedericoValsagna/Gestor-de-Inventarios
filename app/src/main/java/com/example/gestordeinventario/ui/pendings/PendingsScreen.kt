@@ -106,7 +106,7 @@ fun PendingAcceptButton(
     resetPendingsScreen: () -> Unit
 ) {
     Button(
-        onClick = { /* TODO Sacar elementos pendientes seleccionados */ resetPendingsScreen()},
+        onClick = { viewModel.sumbitDevolutions(); resetPendingsScreen()},
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp),
