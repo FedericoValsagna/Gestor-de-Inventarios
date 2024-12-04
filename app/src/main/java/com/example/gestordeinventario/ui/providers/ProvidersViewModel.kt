@@ -12,12 +12,18 @@ class ProvidersViewModel: ViewModel() {
     private var _providersList = MutableStateFlow(ArrayList<Provider>())
     val providersList : StateFlow<ArrayList<Provider>> = _providersList
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading : StateFlow<Boolean> = _isLoading
+
     init {
-        getProviders()
-    }
-    private fun getProviders(){
-        viewModelScope.launch{
-            _providersList.value = ArrayList(ProviderRepository().getAll())
+        viewModelScope.launch {
+            _isLoading.value = true
+            getProviders()
+            _isLoading.value = false
         }
+    }
+
+    private suspend fun getProviders() {
+        _providersList.value = ArrayList(ProviderRepository().getAll())
     }
 }

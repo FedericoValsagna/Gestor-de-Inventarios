@@ -25,20 +25,26 @@ class DevolutionsViewModel: ViewModel() {
 
     private val _students = MutableStateFlow(List(0){Student("", "", ArrayList(), "",)})
     val students = _students
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading : StateFlow<Boolean> = _isLoading
+
     init {
-        getStudents()
-        getDevolutions()
-    }
-
-    private fun getStudents() {
         viewModelScope.launch {
-            val result: List<Student> = withContext(Dispatchers.IO){
-                StudentRepository().getAll()
-            }
-            _students.value = result
-
+            _isLoading.value = true
+            getStudents()
+            getDevolutions()
+            _isLoading.value = false
         }
     }
+
+    private suspend fun getStudents() {
+        val result: List<Student> = withContext(Dispatchers.IO) {
+            StudentRepository().getAll()
+        }
+        _students.value = result
+    }
+
     private fun getDevolutions(){
         viewModelScope.launch{
             val result: List<PendingElement> = withContext(Dispatchers.IO) {

@@ -1,5 +1,6 @@
 package com.example.gestordeinventario.ui.replenish
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,18 +19,26 @@ class ReplenishViewModel(providerName: String): ViewModel() {
 
     private val _elements = MutableLiveData<ArrayList<Element>>()
     val elements = _elements
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
+
     init{
-        fetchProvider(providerName)
-    }
-    private fun fetchProvider(providerName: String){
         viewModelScope.launch {
-            val result: Provider = withContext(Dispatchers.IO){
-                ProviderRepository().getByName(providerName)?: Provider("Error", ArrayList<Element>())
-            }
-            _provider.value = result
-            _elements.value = result.elements
+            _isLoading.value = true
+            fetchProvider(providerName)
+            _isLoading.value = false
         }
     }
+
+    private suspend fun fetchProvider(providerName: String) {
+        val result: Provider = withContext(Dispatchers.IO) {
+            ProviderRepository().getByName(providerName) ?: Provider("Error", ArrayList<Element>())
+        }
+        _provider.value = result
+        _elements.value = result.elements
+    }
+
     fun pendingElementQuantityInc(element: Element) {
         val newElements = ArrayList<Element>()
         elements.value?.forEach {
@@ -42,6 +51,7 @@ class ReplenishViewModel(providerName: String): ViewModel() {
         }
         elements.value = newElements
     }
+
     fun pendingElementQuantityDec(element: Element) {
         val newElements = ArrayList<Element>()
         elements.value?.forEach {
@@ -55,6 +65,7 @@ class ReplenishViewModel(providerName: String): ViewModel() {
         elements.value = newElements
         provider.value?.elements = newElements
     }
+
     fun submitReplenish() {
         viewModelScope.launch{
             elements.value?.forEach{ element ->

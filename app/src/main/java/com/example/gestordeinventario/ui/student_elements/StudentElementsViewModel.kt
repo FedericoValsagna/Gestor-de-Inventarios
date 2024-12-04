@@ -14,15 +14,20 @@ class StudentElementsViewModel: ViewModel() {
     private var _elementsList = MutableLiveData< List<Element> >()
     val elementsList : LiveData<List<Element>> = _elementsList
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
+
     init {
-        getElements()
-    }
-    private fun getElements(){
-        viewModelScope.launch{
-            val result: List<Element> = withContext(Dispatchers.IO) {
-                ElementRepository().getAll()
-            }
-            _elementsList.value = result
+        viewModelScope.launch {
+            _isLoading.value = true
+            getElements()
+            _isLoading.value = false
         }
+    }
+    private suspend fun getElements(){
+        val result: List<Element> = withContext(Dispatchers.IO) {
+            ElementRepository().getAll()
+        }
+        _elementsList.value = result
     }
 }

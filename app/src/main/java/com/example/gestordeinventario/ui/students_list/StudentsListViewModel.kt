@@ -18,15 +18,20 @@ class StudentsListViewModel: ViewModel() {
     private var _studentsList = MutableLiveData< List<Student> >()
     val studentsList : LiveData< List<Student> > = _studentsList
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
+
     init {
-        getUsers()
+        viewModelScope.launch {
+            _isLoading.value = true
+            getUsers()
+            _isLoading.value = false
+        }
     }
-    private fun getUsers(){
-        viewModelScope.launch{
+    private suspend fun getUsers(){
             val result: List<Student> = withContext(Dispatchers.IO) {
                 StudentRepository().getAll()
             }
             _studentsList.value = result
-        }
     }
 }

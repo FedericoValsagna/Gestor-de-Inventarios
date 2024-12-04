@@ -1,6 +1,5 @@
 package com.example.gestordeinventario.ui.pendings
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestordeinventario.model.PendingElement
@@ -8,8 +7,6 @@ import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.repository.ElementRepository
 import com.example.gestordeinventario.repository.PendingElementRepository
 import com.example.gestordeinventario.repository.StudentRepository
-import com.example.gestordeinventario.ui.common.CheckboxInfo
-import com.google.protobuf.Internal.BooleanList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,9 +20,14 @@ class PendingsViewModel(padron: String): ViewModel() {
     private val _checkboxHashMap = MutableStateFlow(HashMap<String, Pair<PendingElement, Boolean>>())
     val checkboxHashMap: StateFlow<HashMap<String, Pair<PendingElement,Boolean>>> = _checkboxHashMap
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading : StateFlow<Boolean> = _isLoading
+
     init{
         viewModelScope.launch {
+            _isLoading.value = true
             getUser(padron)
+            _isLoading.value = false
         }
     }
     private suspend fun getUser(padron: String){

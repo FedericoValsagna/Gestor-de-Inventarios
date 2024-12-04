@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,20 +34,33 @@ fun ProvidersListScreen(viewModel: ProvidersViewModel, screensNavigation: Screen
     val providersList : List<Provider> by viewModel.providersList.collectAsState()
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
+    val isLoading: Boolean by viewModel.isLoading.collectAsState()
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp) ) {
-        ProviderListHeader(Modifier.align(Alignment.CenterHorizontally))
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.8f)){
-            ProviderList(providers = providersList, modifier = Modifier, screensNavigation = screensNavigation)
+    if(isLoading){
+        Box(Modifier.fillMaxSize()){
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
+    }
+    else {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            ProviderListHeader(Modifier.align(Alignment.CenterHorizontally))
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Box(Modifier.height(screenHeight * 0.8f)) {
+                ProviderList(
+                    providers = providersList,
+                    modifier = Modifier,
+                    screensNavigation = screensNavigation
+                )
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            LogoutButton(modifier = Modifier.align(Alignment.Start)) { screensNavigation.restart() }
+        }
     }
 }
 

@@ -39,6 +39,7 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
     suspend fun onLoginSelected(screensNavigation: ScreensNavigation) {
         _isLoading.value = true
         if (_email.value != null && _password.value != null) {
@@ -47,7 +48,6 @@ class LoginViewModel : ViewModel() {
                     val responseId = response.id
                     Log.i("LOGIN", "LOGIN SUCCESFUL | AuthId: $responseId")
                     if (responseId != null){
-                        _isLoading.value = false
                         val student = StudentRepository().getByAuthId(responseId)
                         if (student != null){
                             Log.i("LOGIN", "STUDENT FOUND | Student: $student")
@@ -68,21 +68,17 @@ class LoginViewModel : ViewModel() {
                     }
                 }
                 LoginResponse.INVALID_EMAIL -> {
-                    _isLoading.value = false
                     _showErrorDialog.value = true
                 }
                 LoginResponse.INVALID_PASSWORD -> {
-                    _isLoading.value = false
                     _showErrorDialog.value = true
                 }
                 LoginResponse.OTHER_ERROR -> {
-                    _isLoading.value = false
                     _showErrorDialog.value = true
                 }
             }
         }
-        // delay(4000)
-        // _isLoading.value = false
+         _isLoading.value = false
     }
 
     fun dismissErrorDialog(){

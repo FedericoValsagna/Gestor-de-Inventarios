@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,23 +46,39 @@ fun PendingsScreen(viewModel: PendingsViewModel, screensNavigation: ScreensNavig
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val student: Student by viewModel.student.collectAsState()
-    val checkboxHashmap: HashMap<String, Pair<PendingElement, Boolean>> by viewModel.checkboxHashMap.collectAsState()
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp) ) {
-        PendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.7f)){
-            Pendings(viewModel, student.getOngoingPendingElements(), modifier = Modifier.fillMaxWidth())
+    val isLoading: Boolean by viewModel.isLoading.collectAsState()
+
+    if(isLoading){
+        Box(Modifier.fillMaxSize()){
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Spacer(modifier = Modifier.padding(8.dp))
-        PendingAcceptButton(viewModel = viewModel, modifier = Modifier.align(Alignment.CenterHorizontally)){screensNavigation.navigateToPendings(student.padron)}
-        Spacer(modifier = Modifier.padding(8.dp))
-        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
+    }
+    else {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            PendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Box(Modifier.height(screenHeight * 0.7f)) {
+                Pendings(
+                    viewModel,
+                    student.getOngoingPendingElements(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.padding(8.dp))
+            PendingAcceptButton(
+                viewModel = viewModel,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) { screensNavigation.navigateToPendings(student.padron) }
+            Spacer(modifier = Modifier.padding(8.dp))
+            LogoutButton(modifier = Modifier.align(Alignment.Start)) { screensNavigation.restart() }
+        }
     }
 }
 

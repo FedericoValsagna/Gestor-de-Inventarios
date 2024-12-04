@@ -25,20 +25,25 @@ class LendingsViewModel(padron: String): ViewModel() {
     private val _pendingElements = MutableStateFlow(ArrayList<PendingElement>())
     val pendingElements: StateFlow<ArrayList<PendingElement>> = _pendingElements
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading : StateFlow<Boolean> = _isLoading
+
     private val _actualDate = Date()
 
     init {
-        getUser(padron)
+        viewModelScope.launch {
+            _isLoading.value = true
+            getUser(padron)
+            _isLoading.value = false
+        }
     }
 
-    private fun getUser(padron: String) {
-        viewModelScope.launch {
+    private suspend fun getUser(padron: String) {
             val result: Student = withContext(Dispatchers.IO) {
                 StudentRepository().getById(padron) ?: Student("Error", "", ArrayList(), "")
             }
             _student.value = result
             getElements()
-        }
     }
 
     private fun getElements() {

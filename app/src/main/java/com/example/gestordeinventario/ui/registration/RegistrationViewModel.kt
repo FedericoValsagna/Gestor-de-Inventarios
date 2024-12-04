@@ -62,7 +62,6 @@ class RegistrationViewModel : ViewModel() {
                 StudentRepository().save(student)
             }
         }
-        delay(4000)
         _isLoading.value = false
     }
 }

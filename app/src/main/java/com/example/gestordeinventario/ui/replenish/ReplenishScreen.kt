@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,24 +42,36 @@ fun ReplenishScreen(viewModel: ReplenishViewModel, screensNavigation: ScreensNav
     val screenWidth = configuration.screenWidthDp.dp
     val provider: Provider by viewModel.provider.observeAsState(initial= Provider("", ArrayList()))
     val elements: ArrayList<Element> by viewModel.elements.observeAsState(initial = ArrayList())
+    val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp) ) {
-        ReplenishHeader(Modifier.align(Alignment.CenterHorizontally), provider.name)
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.8f)){
-            // Elements(provider.elements, modifier = Modifier)
-            Replenisher(viewModel, elements, modifier = Modifier)
+    if(isLoading){
+        Box(Modifier.fillMaxSize()){
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Spacer(modifier = Modifier.padding(8.dp))
-        ReplenishAcceptButton(viewModel = viewModel, modifier = Modifier.align(Alignment.CenterHorizontally))
-        Spacer(modifier = Modifier.padding(8.dp))
-        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
+    }
+    else {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            ReplenishHeader(Modifier.align(Alignment.CenterHorizontally), provider.name)
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Box(Modifier.height(screenHeight * 0.8f)) {
+                // Elements(provider.elements, modifier = Modifier)
+                Replenisher(viewModel, elements, modifier = Modifier)
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.padding(8.dp))
+            ReplenishAcceptButton(
+                viewModel = viewModel,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.padding(8.dp))
+            LogoutButton(modifier = Modifier.align(Alignment.Start)) { screensNavigation.restart() }
+        }
     }
 }
 

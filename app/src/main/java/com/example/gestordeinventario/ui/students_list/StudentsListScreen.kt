@@ -11,17 +11,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.gestordeinventario.core.navigation.ScreensNavigation
 import com.example.gestordeinventario.model.Student
 import com.example.gestordeinventario.ui.common.LogoutButton
@@ -33,20 +37,33 @@ fun StudentsListScreen(viewModel: StudentsListViewModel, screensNavigation: Scre
     val studentsList : List<Student> by viewModel.studentsList.observeAsState(initial = emptyList())
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
+    val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp) ) {
-        StudentListHeader(Modifier.align(Alignment.CenterHorizontally))
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.8f)){
-            StudentList(students = studentsList, modifier = Modifier, screensNavigation = screensNavigation)
+    if(isLoading){
+        Box(Modifier.fillMaxSize()){
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
+    }
+    else {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            StudentListHeader(Modifier.align(Alignment.CenterHorizontally))
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Box(Modifier.height(screenHeight * 0.8f)) {
+                StudentList(
+                    students = studentsList,
+                    modifier = Modifier,
+                    screensNavigation = screensNavigation
+                )
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            LogoutButton(modifier = Modifier.align(Alignment.Start)) { screensNavigation.restart() }
+        }
     }
 }
 

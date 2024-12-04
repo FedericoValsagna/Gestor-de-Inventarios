@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,23 +37,35 @@ fun LendingsScreen(viewModel: LendingsViewModel, screensNavigation: ScreensNavig
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val student: Student by viewModel.student.collectAsState()
+    val isLoading: Boolean by viewModel.isLoading.collectAsState()
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp) ) {
-        LendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Box(Modifier.height(screenHeight*0.7f)){
-            Lendings(viewModel = viewModel, modifier = Modifier)
+    if(isLoading){
+        Box(Modifier.fillMaxSize()){
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
-        Spacer(modifier = Modifier.padding(2.dp))
-        HorizontalDivider()
-        Spacer(modifier = Modifier.padding(8.dp))
-        LendingAcceptButton(viewModel = viewModel, modifier = Modifier.align(Alignment.CenterHorizontally)){screensNavigation.navigateToLendings(student.padron)}
-        Spacer(modifier = Modifier.padding(8.dp))
-        LogoutButton(modifier = Modifier.align(Alignment.Start)){screensNavigation.restart()}
+    }
+    else {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            LendingsHeader(Modifier.align(Alignment.CenterHorizontally), student.name)
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Box(Modifier.height(screenHeight * 0.7f)) {
+                Lendings(viewModel = viewModel, modifier = Modifier)
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.padding(8.dp))
+            LendingAcceptButton(
+                viewModel = viewModel,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) { screensNavigation.navigateToLendings(student.padron) }
+            Spacer(modifier = Modifier.padding(8.dp))
+            LogoutButton(modifier = Modifier.align(Alignment.Start)) { screensNavigation.restart() }
+        }
     }
 }
 
